@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.spinoza.learningvknews.presentation.ui.PostCard
+import com.spinoza.learningvknews.presentation.ui.MainScreen
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,10 +24,9 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colors.background)
                         .padding(8.dp)
                 ) {
-                    PostCard()
+                    MainScreen()
                 }
             }
         }
     }
 }
-
