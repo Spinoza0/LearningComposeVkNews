@@ -1,48 +1,49 @@
 package com.spinoza.learningvknews.presentation.ui
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.launch
+import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.domain.StatisticItem
 
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
-    val snackbarHostState = remember { SnackbarHostState() }
+
+    val feedPost = remember { mutableStateOf(FeedPost()) }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        floatingActionButton = { MainScreenFAB(snackbarHostState = snackbarHostState) },
         bottomBar = { MainScreenBottomBar() }
     ) {
+        PostCard(
+            modifier = Modifier.padding(it),
+            feedPost = feedPost.value,
+            onStatisticItemClickListener = { statisticItem ->
+                statisticItemClickListener(statisticItem, feedPost)
+            }
+        )
     }
 }
 
-@Composable
-private fun MainScreenFAB(snackbarHostState: SnackbarHostState) {
-    val scope = rememberCoroutineScope()
-    val fabIsVisible = remember { mutableStateOf(true) }
-
-    if (fabIsVisible.value) {
-        FloatingActionButton(onClick = {
-            scope.launch {
-                val action = snackbarHostState.showSnackbar(
-                    message = "This is snackbar",
-                    actionLabel = "Hide FAB",
-                    duration = SnackbarDuration.Long
-                )
-                if (action == SnackbarResult.ActionPerformed) {
-                    fabIsVisible.value = false
-                }
+private fun statisticItemClickListener(
+    newItem: StatisticItem,
+    feedPost: MutableState<FeedPost>,
+) {
+    val oldStatistics = feedPost.value.statistics
+    val newStatistics = oldStatistics.toMutableList().apply {
+        replaceAll { oldItem ->
+            if (oldItem.type == newItem.type) {
+                oldItem.copy(count = oldItem.count + 1)
+            } else {
+                oldItem
             }
-        }) {
-            Icon(Icons.Filled.Favorite, null)
         }
     }
+    feedPost.value = feedPost.value.copy(statistics = newStatistics)
 }
 
 @Composable

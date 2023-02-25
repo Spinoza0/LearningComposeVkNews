@@ -3,11 +3,10 @@
     <string name="image_author">Image - author</string>
     <string name="image_content">content image</string>
     <string name="views_count">Views count</string>
-    <string name="reposts_count">Reposts count</string>
+    <string name="shares_count">Reposts count</string>
     <string name="comments_count">Comments count</string>
     <string name="likes_count">Likes count</string>
     <string name="menu">Menu</string>
-    <string name="template_text">кабаныч, когда узнал, что если сотрудникам не платить, они начинают умирать от голода</string>
     <string name="navigation_item_main">Главная</string>
     <string name="navigation_item_favourite">Избранное</string>
     <string name="navigation_item_profile">Профиль</string>
