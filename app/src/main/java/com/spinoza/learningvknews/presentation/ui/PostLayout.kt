@@ -18,13 +18,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.StatisticItem
 import com.spinoza.learningvknews.domain.StatisticType
-import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 
 private const val WEIGHT = 1f
 
@@ -32,7 +30,10 @@ private const val WEIGHT = 1f
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onStatisticItemClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -48,7 +49,13 @@ fun PostCard(
             PostBody(feedPost)
             SpacerHeight8dp()
 
-            PostFooter(feedPost.statistics, onStatisticItemClickListener)
+            PostFooter(
+                statistics = feedPost.statistics,
+                onLikeClickListener = onLikeClickListener,
+                onShareClickListener = onShareClickListener,
+                onViewsClickListener = onViewsClickListener,
+                onCommentClickListener = onCommentClickListener
+            )
         }
     }
 }
@@ -107,7 +114,10 @@ private fun PostBody(feedPost: FeedPost) {
 @Composable
 private fun PostFooter(
     statistics: List<StatisticItem>,
-    onItemClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
 ) {
     Row {
         Row(
@@ -118,7 +128,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_views_count,
                 iconDescriptionResId = R.string.views_count,
                 text = viewsItem.count.toString(),
-                onItemClickListener = { onItemClickListener(viewsItem) }
+                onItemClickListener = { onViewsClickListener(viewsItem) }
             )
         }
         Row(
@@ -130,7 +140,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_share,
                 iconDescriptionResId = R.string.shares_count,
                 text = sharesItem.count.toString(),
-                onItemClickListener = { onItemClickListener(sharesItem) }
+                onItemClickListener = { onShareClickListener(sharesItem) }
             )
 
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
@@ -138,7 +148,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_comment,
                 iconDescriptionResId = R.string.comments_count,
                 text = commentsItem.count.toString(),
-                onItemClickListener = { onItemClickListener(commentsItem) }
+                onItemClickListener = { onCommentClickListener(commentsItem) }
             )
 
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
@@ -146,7 +156,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_like,
                 iconDescriptionResId = R.string.likes_count,
                 text = likesItem.count.toString(),
-                onItemClickListener = { onItemClickListener(likesItem) }
+                onItemClickListener = { onLikeClickListener(likesItem) }
             )
         }
     }
@@ -194,20 +204,4 @@ private fun SpacerWidth4dp() {
 @Composable
 private fun SpacerHeight8dp() {
     Spacer(modifier = Modifier.height(8.dp))
-}
-
-@Preview
-@Composable
-private fun PreviewLight() {
-    LearningVkNewsTheme(darkTheme = false) {
-        PostCard(feedPost = FeedPost(), onStatisticItemClickListener = {})
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewDark() {
-    LearningVkNewsTheme(darkTheme = true) {
-        PostCard(feedPost = FeedPost(), onStatisticItemClickListener = {})
-    }
 }
