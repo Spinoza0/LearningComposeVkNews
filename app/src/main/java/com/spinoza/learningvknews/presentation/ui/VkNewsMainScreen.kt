@@ -4,24 +4,23 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.spinoza.learningvknews.navigation.AppNavGraph
-import com.spinoza.learningvknews.navigation.Screen
+import com.spinoza.learningvknews.navigation.NavigationState
+import com.spinoza.learningvknews.navigation.rememberNavigationState
 import com.spinoza.learningvknews.presentation.HomeScreen
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
 
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
 
     Scaffold(
-        bottomBar = { MainScreenBottomBar(navHostController) }
+        bottomBar = { MainScreenBottomBar(navigationState) }
     ) { paddingValues ->
         AppNavGraph(
-            navHostController = navHostController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = { HomeScreen(viewModel, paddingValues) },
             favouriteScreenContent = { /*TODO*/ },
             profileScreenContent = { /*TODO*/ })
@@ -30,10 +29,10 @@ fun MainScreen(viewModel: MainViewModel) {
 
 @Composable
 private fun MainScreenBottomBar(
-    navHostController: NavHostController,
+    navigationState: NavigationState,
 ) {
     BottomNavigation {
-        val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+        val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         val items = listOf(
@@ -46,15 +45,7 @@ private fun MainScreenBottomBar(
             val title = stringResource(item.titleResId)
             BottomNavigationItem(
                 selected = currentRoute == item.screen.route,
-                onClick = {
-                    navHostController.navigate(item.screen.route) {
-                        popUpTo(Screen.NewsFeed.route) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onClick = { navigationState.navigateTo(item.screen.route) },
                 icon = { Icon(item.icon, contentDescription = title) },
                 label = { Text(title) },
                 selectedContentColor = MaterialTheme.colors.onPrimary,
