@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.spinoza.learningvknews.navigation.AppNavGraph
+import com.spinoza.learningvknews.navigation.Screen
 import com.spinoza.learningvknews.presentation.HomeScreen
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
@@ -45,7 +46,15 @@ private fun MainScreenBottomBar(
             val title = stringResource(item.titleResId)
             BottomNavigationItem(
                 selected = currentRoute == item.screen.route,
-                onClick = { navHostController.navigate(item.screen.route) },
+                onClick = {
+                    navHostController.navigate(item.screen.route) {
+                        popUpTo(Screen.NewsFeed.route) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 icon = { Icon(item.icon, contentDescription = title) },
                 label = { Text(title) },
                 selectedContentColor = MaterialTheme.colors.onPrimary,
