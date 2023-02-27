@@ -30,10 +30,7 @@ private const val WEIGHT = 1f
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onLikeClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
-    onViewsClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit,
+    onStatisticClickListener: (StatisticItem) -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -50,11 +47,8 @@ fun PostCard(
             SpacerHeight8dp()
 
             PostFooter(
-                statistics = feedPost.statistics,
-                onLikeClickListener = onLikeClickListener,
-                onShareClickListener = onShareClickListener,
-                onViewsClickListener = onViewsClickListener,
-                onCommentClickListener = onCommentClickListener
+                feedPost = feedPost,
+                onStatisticClickListener = onStatisticClickListener
             )
         }
     }
@@ -113,12 +107,10 @@ private fun PostBody(feedPost: FeedPost) {
 
 @Composable
 private fun PostFooter(
-    statistics: List<StatisticItem>,
-    onLikeClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
-    onViewsClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit,
+    feedPost: FeedPost,
+    onStatisticClickListener: (StatisticItem) -> Unit,
 ) {
+    val statistics = feedPost.statistics
     Row {
         Row(
             modifier = Modifier.weight(WEIGHT)
@@ -128,7 +120,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_views_count,
                 iconDescriptionResId = R.string.views_count,
                 text = viewsItem.count.toString(),
-                onItemClickListener = { onViewsClickListener(viewsItem) }
+                onItemClickListener = { onStatisticClickListener(viewsItem) }
             )
         }
         Row(
@@ -140,7 +132,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_share,
                 iconDescriptionResId = R.string.shares_count,
                 text = sharesItem.count.toString(),
-                onItemClickListener = { onShareClickListener(sharesItem) }
+                onItemClickListener = { onStatisticClickListener(sharesItem) }
             )
 
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
@@ -148,7 +140,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_comment,
                 iconDescriptionResId = R.string.comments_count,
                 text = commentsItem.count.toString(),
-                onItemClickListener = { onCommentClickListener(commentsItem) }
+                onItemClickListener = { onStatisticClickListener(commentsItem) }
             )
 
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
@@ -156,7 +148,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_like,
                 iconDescriptionResId = R.string.likes_count,
                 text = likesItem.count.toString(),
-                onItemClickListener = { onLikeClickListener(likesItem) }
+                onItemClickListener = { onStatisticClickListener(likesItem) }
             )
         }
     }

@@ -7,22 +7,44 @@ import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.StatisticItem
 
 class MainViewModel : ViewModel() {
-    private val _feedPost = MutableLiveData(FeedPost())
-    val feedPost: LiveData<FeedPost> = _feedPost
+    private val initialList = mutableListOf<FeedPost>().apply {
+        repeat(10) {
+            add(FeedPost(id = it))
+        }
+    }
 
-    fun updateCount(statisticItem: StatisticItem) {
-        feedPost.value?.let { post ->
-            val oldStatistics = post.statistics
-            val newStatistics = oldStatistics.toMutableList().apply {
-                replaceAll { oldItem ->
-                    if (oldItem.type == statisticItem.type) {
-                        oldItem.copy(count = oldItem.count + 1)
-                    } else {
-                        oldItem
-                    }
+    private val _feedPosts = MutableLiveData<List<FeedPost>>(initialList)
+    val feedPosts: LiveData<List<FeedPost>> = _feedPosts
+
+    fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
+        val oldStatistics = feedPost.statistics
+        val oldFeedPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        val newStatistics = oldStatistics.toMutableList().apply {
+            replaceAll { oldItem ->
+                if (oldItem.type == statisticItem.type) {
+                    oldItem.copy(count = oldItem.count + 1)
+                } else {
+                    oldItem
                 }
             }
-            _feedPost.value = post.copy(statistics = newStatistics)
+        }
+        val newFeedPost = feedPost.copy(statistics = newStatistics)
+
+        _feedPosts.value = oldFeedPosts.apply {
+            replaceAll {
+                if (it.id == feedPost.id) {
+                    newFeedPost
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
+    fun delete(feedPost: FeedPost) {
+        val modifiedList = feedPosts.value?.toMutableList() ?: mutableListOf()
+        _feedPosts.value = modifiedList.apply {
+            remove(feedPost)
         }
     }
 }
