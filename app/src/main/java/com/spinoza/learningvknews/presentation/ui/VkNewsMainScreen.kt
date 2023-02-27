@@ -3,34 +3,38 @@ package com.spinoza.learningvknews.presentation.ui
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.spinoza.learningvknews.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.HomeScreen
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
 
-    val selectedNavItem by viewModel.selectedNavItem.observeAsState(NavigationItem.Home)
+    val navHostController = rememberNavController()
 
     Scaffold(
-        bottomBar = {
-            MainScreenBottomBar(selectedNavItem) { viewModel.selectNavItem(it) }
-        }
-    ) {paddingValues ->
-        when (selectedNavItem) {
-            NavigationItem.Home -> HomeScreen(viewModel, paddingValues)
-            else -> {}
-        }
+        bottomBar = { MainScreenBottomBar(navHostController) }
+    ) { paddingValues ->
+        AppNavGraph(
+            navHostController = navHostController,
+            homeScreenContent = { HomeScreen(viewModel, paddingValues) },
+            favouriteScreenContent = { /*TODO*/ },
+            profileScreenContent = { /*TODO*/ })
     }
 }
 
 @Composable
 private fun MainScreenBottomBar(
-    selectedNavItem: NavigationItem,
-    onSelectItem: (NavigationItem) -> Unit,
+    navHostController: NavHostController,
 ) {
     BottomNavigation {
+        val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
         val items = listOf(
             NavigationItem.Home,
             NavigationItem.Favourite,
@@ -40,8 +44,8 @@ private fun MainScreenBottomBar(
         items.forEach { item ->
             val title = stringResource(item.titleResId)
             BottomNavigationItem(
-                selected = selectedNavItem == item,
-                onClick = { onSelectItem(item) },
+                selected = currentRoute == item.screen.route,
+                onClick = { navHostController.navigate(item.screen.route) },
                 icon = { Icon(item.icon, contentDescription = title) },
                 label = { Text(title) },
                 selectedContentColor = MaterialTheme.colors.onPrimary,
