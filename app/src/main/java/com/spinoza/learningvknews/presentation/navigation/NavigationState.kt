@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.navigation
+package com.spinoza.learningvknews.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

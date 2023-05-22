@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.spinoza.learningvknews.navigation.AppNavGraph
-import com.spinoza.learningvknews.navigation.NavigationState
-import com.spinoza.learningvknews.navigation.rememberNavigationState
-import com.spinoza.learningvknews.presentation.ui.NavigationItem
+import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
+import com.spinoza.learningvknews.presentation.navigation.NavigationState
+import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState
+import com.spinoza.learningvknews.presentation.navigation.NavigationItem
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
 @Composable

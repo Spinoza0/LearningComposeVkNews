@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.navigation
+package com.spinoza.learningvknews.presentation.navigation
 
 sealed class Screen(val route: String) {
 
