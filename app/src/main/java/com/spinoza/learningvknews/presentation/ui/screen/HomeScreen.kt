@@ -1,31 +1,20 @@
-package com.spinoza.learningvknews.presentation
+package com.spinoza.learningvknews.presentation.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.spinoza.learningvknews.domain.PostComment
-import com.spinoza.learningvknews.presentation.ui.PostCard
-import com.spinoza.learningvknews.presentation.ui.screen.CommentsScreen
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     viewModel: MainViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     val feedPosts = viewModel.feedPosts.observeAsState(listOf())
 
-    if(feedPosts.value.isNotEmpty()) {
-        val comments= mutableListOf<PostComment>().apply {
+    if (feedPosts.value.isNotEmpty()) {
+        val comments = mutableListOf<PostComment>().apply {
             repeat(20) {
                 add(PostComment(it))
             }

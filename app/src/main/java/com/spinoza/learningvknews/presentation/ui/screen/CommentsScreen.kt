@@ -19,6 +19,13 @@ import androidx.compose.ui.unit.sp
 import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.PostComment
+import com.spinoza.learningvknews.presentation.ui.COMMENT_BOTTOM_SIZE
+import com.spinoza.learningvknews.presentation.ui.COMMENT_FONT_DEFAULT_SIZE
+import com.spinoza.learningvknews.presentation.ui.COMMENT_FONT_SIZE
+import com.spinoza.learningvknews.presentation.ui.SIZE_LARGE
+import com.spinoza.learningvknews.presentation.ui.SIZE_MEDIUM
+import com.spinoza.learningvknews.presentation.ui.SIZE_MINI
+import com.spinoza.learningvknews.presentation.ui.SIZE_SMALL
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 
 @Composable
@@ -44,10 +51,10 @@ fun CommentsScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
             contentPadding = PaddingValues(
-                top = 16.dp,
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 72.dp
+                top = SIZE_MEDIUM.dp,
+                start = SIZE_SMALL.dp,
+                end = SIZE_SMALL.dp,
+                bottom = COMMENT_BOTTOM_SIZE.dp
             )
         ) {
             items(items = comments, key = { it.id }) {
@@ -62,21 +69,21 @@ private fun CommentItem(comment: PostComment) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = SIZE_MEDIUM.dp, vertical = SIZE_MINI.dp)
     ) {
         Image(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(SIZE_LARGE.dp),
             painter = painterResource(id = comment.authorAvatarId),
             contentDescription = stringResource(
                 R.string.avatar
             )
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(SIZE_SMALL.dp))
         Column {
             CommentText("${comment.authorName}, commentId: ${comment.id}")
-            Spacer(modifier = Modifier.height(4.dp))
-            CommentText(comment.commentText, 14.sp)
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(SIZE_MINI.dp))
+            CommentText(comment.commentText, COMMENT_FONT_SIZE.sp)
+            Spacer(modifier = Modifier.height(SIZE_MINI.dp))
             CommentText(comment.publicationDate, color = MaterialTheme.colors.onSecondary)
         }
     }
@@ -85,7 +92,7 @@ private fun CommentItem(comment: PostComment) {
 @Composable
 private fun CommentText(
     text: String,
-    fontSize: TextUnit = 12.sp,
+    fontSize: TextUnit = COMMENT_FONT_DEFAULT_SIZE.sp,
     color: Color = MaterialTheme.colors.onPrimary,
 ) {
     Text(

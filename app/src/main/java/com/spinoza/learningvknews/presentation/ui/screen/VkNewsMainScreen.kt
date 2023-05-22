@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.ui
+package com.spinoza.learningvknews.presentation.ui.screen
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -8,7 +8,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.spinoza.learningvknews.navigation.AppNavGraph
 import com.spinoza.learningvknews.navigation.NavigationState
 import com.spinoza.learningvknews.navigation.rememberNavigationState
-import com.spinoza.learningvknews.presentation.HomeScreen
+import com.spinoza.learningvknews.presentation.ui.NavigationItem
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
 @Composable

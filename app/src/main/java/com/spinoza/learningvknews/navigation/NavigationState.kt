@@ -5,9 +5,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-class NavigationState(
-    val navHostController: NavHostController,
-) {
+class NavigationState(val navHostController: NavHostController) {
+
     fun navigateTo(route: String) {
         navHostController.navigate(route) {
             navHostController.graph.startDestinationRoute?.let {

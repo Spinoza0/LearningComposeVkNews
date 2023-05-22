@@ -34,17 +34,17 @@ fun PostCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(size = 8.dp),
-        elevation = 1.dp
+        shape = RoundedCornerShape(size = SIZE_SMALL.dp),
+        elevation = CARD_ELEVATION.dp
     ) {
         Column(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(SIZE_SMALL.dp)
         ) {
             PostHeader(feedPost)
-            SpacerHeight8dp()
+            SpacerHeightSmall()
 
             PostBody(feedPost)
-            SpacerHeight8dp()
+            SpacerHeightSmall()
 
             PostFooter(
                 feedPost = feedPost,
@@ -67,7 +67,7 @@ private fun PostHeader(feedPost: FeedPost) {
             painter = painterResource(id = feedPost.avatarResId),
             contentDescription = stringResource(R.string.image_author)
         )
-        SpacerWidth8dp()
+        SpacerWidthSmall()
         Column(
             modifier = Modifier.weight(WEIGHT)
         ) {
@@ -75,7 +75,7 @@ private fun PostHeader(feedPost: FeedPost) {
                 text = feedPost.communityName,
                 color = MaterialTheme.colors.onPrimary
             )
-            SpacerWidth4dp()
+            SpacerWidthMini()
             Text(
                 text = feedPost.publicationDate,
                 color = MaterialTheme.colors.onSecondary
@@ -93,7 +93,7 @@ private fun PostHeader(feedPost: FeedPost) {
 private fun PostBody(feedPost: FeedPost) {
     Column {
         Text(text = feedPost.contentText)
-        SpacerHeight8dp()
+        SpacerHeightSmall()
         Image(
             modifier = Modifier
                 .fillMaxWidth()
@@ -170,12 +170,12 @@ private fun IconWithText(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(25.dp),
+            modifier = Modifier.size(ICON_SIZE.dp),
             painter = painterResource(id = iconResId),
             contentDescription = stringResource(iconDescriptionResId),
             tint = MaterialTheme.colors.onSecondary
         )
-        SpacerWidth4dp()
+        SpacerWidthMini()
         Text(
             text = text,
             color = MaterialTheme.colors.onSecondary
@@ -184,16 +184,16 @@ private fun IconWithText(
 }
 
 @Composable
-private fun SpacerWidth8dp() {
-    Spacer(modifier = Modifier.width(8.dp))
+private fun SpacerWidthSmall() {
+    Spacer(modifier = Modifier.width(SIZE_SMALL.dp))
 }
 
 @Composable
-private fun SpacerWidth4dp() {
-    Spacer(modifier = Modifier.width(4.dp))
+private fun SpacerWidthMini() {
+    Spacer(modifier = Modifier.width(SIZE_MINI.dp))
 }
 
 @Composable
-private fun SpacerHeight8dp() {
-    Spacer(modifier = Modifier.height(8.dp))
+private fun SpacerHeightSmall() {
+    Spacer(modifier = Modifier.height(SIZE_SMALL.dp))
 }

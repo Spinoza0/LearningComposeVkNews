@@ -11,7 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.spinoza.learningvknews.presentation.ui.MainScreen
+import com.spinoza.learningvknews.presentation.ui.screen.MainScreen
+import com.spinoza.learningvknews.presentation.ui.SIZE_SMALL
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colors.background)
-                        .padding(8.dp)
+                        .padding(SIZE_SMALL.dp)
                 ) {
                     MainScreen(viewModel)
                 }
