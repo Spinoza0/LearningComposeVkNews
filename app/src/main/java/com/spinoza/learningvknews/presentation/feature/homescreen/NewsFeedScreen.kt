@@ -15,19 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.NewsFeedViewModel
 import com.spinoza.learningvknews.presentation.ui.PostCard
 import com.spinoza.learningvknews.presentation.util.DISMISS_THRESHOLDS
 import com.spinoza.learningvknews.presentation.util.HOME_BOTTOM_SIZE
 import com.spinoza.learningvknews.presentation.util.SIZE_MEDIUM
 import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
-import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun PostsScreen(
+fun NewsFeedScreen(
     posts: List<FeedPost>,
-    viewModel: MainViewModel,
+    viewModel: NewsFeedViewModel,
     paddingValues: PaddingValues,
+    onCommentsClickListener: (FeedPost) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
@@ -60,7 +61,7 @@ fun PostsScreen(
                     onStatisticClickListener = { statisticItem ->
                         viewModel.updateCount(feedPost, statisticItem)
                     },
-                    onCommentsClickListener = viewModel::showComments
+                    onCommentsClickListener = onCommentsClickListener
                 )
             }
         }

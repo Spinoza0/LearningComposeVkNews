@@ -1,26 +1,25 @@
 package com.spinoza.learningvknews.presentation.feature.homescreen
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import com.spinoza.learningvknews.presentation.feature.homescreen.model.HomeScreenState
-import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.NewsFeedScreenState
+import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.NewsFeedViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: MainViewModel,
     paddingValues: PaddingValues,
+    onCommentsClickListener: (FeedPost) -> Unit,
 ) {
+    val viewModel: NewsFeedViewModel = viewModel()
     when (val screenState =
-        viewModel.screenState.observeAsState(HomeScreenState.Initial).value
+        viewModel.screenState.observeAsState(NewsFeedScreenState.Initial).value
     ) {
-        is HomeScreenState.Posts -> PostsScreen(screenState.posts, viewModel, paddingValues)
-        is HomeScreenState.Comments -> {
-            CommentsScreen(screenState.feedPost, screenState.comments) { viewModel.closeComments() }
-            BackHandler { viewModel.closeComments() }
-        }
+        is NewsFeedScreenState.Posts ->
+            NewsFeedScreen(screenState.posts, viewModel, paddingValues, onCommentsClickListener)
 
-        is HomeScreenState.Initial -> {}
+        is NewsFeedScreenState.Initial -> {}
     }
 }

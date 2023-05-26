@@ -1,16 +1,15 @@
-package com.spinoza.learningvknews.presentation.viewmodel
+package com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.PostComment
 import com.spinoza.learningvknews.domain.StatisticItem
-import com.spinoza.learningvknews.presentation.feature.homescreen.model.HomeScreenState
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.NewsFeedScreenState
 
-class MainViewModel : ViewModel() {
+class NewsFeedViewModel : ViewModel() {
 
-    val screenState: LiveData<HomeScreenState>
+    val screenState: LiveData<NewsFeedScreenState>
         get() = _screenState
 
     private val initialList = mutableListOf<FeedPost>().apply {
@@ -19,28 +18,12 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private val comments = mutableListOf<PostComment>().apply {
-        repeat(10) {
-            add(PostComment(id = it))
-        }
-    }
-
-    private val initialState = HomeScreenState.Posts(initialList)
-    private val _screenState = MutableLiveData<HomeScreenState>(initialState)
-    private var savedState: HomeScreenState? = initialState
-
-    fun showComments(feedPost: FeedPost) {
-        savedState = _screenState.value
-        _screenState.value = HomeScreenState.Comments(feedPost, comments)
-    }
-
-    fun closeComments() {
-        _screenState.value = savedState
-    }
+    private val initialState = NewsFeedScreenState.Posts(initialList)
+    private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
         val currentState = screenState.value
-        if (currentState !is HomeScreenState.Posts) return
+        if (currentState !is NewsFeedScreenState.Posts) return
         val oldStatistics = feedPost.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
@@ -60,13 +43,13 @@ class MainViewModel : ViewModel() {
                 newPosts.add(oldFeedPost)
             }
         }
-        _screenState.value = HomeScreenState.Posts(newPosts)
+        _screenState.value = NewsFeedScreenState.Posts(newPosts)
     }
 
     fun delete(feedPost: FeedPost) {
         val currentState = screenState.value
-        if (currentState !is HomeScreenState.Posts) return
+        if (currentState !is NewsFeedScreenState.Posts) return
         val newPosts = currentState.posts.filter { it.id != feedPost.id }
-        _screenState.value = HomeScreenState.Posts(newPosts)
+        _screenState.value = NewsFeedScreenState.Posts(newPosts)
     }
 }

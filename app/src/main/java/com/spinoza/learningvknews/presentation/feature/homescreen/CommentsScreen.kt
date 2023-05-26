@@ -21,6 +21,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,9 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.PostComment
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.CommentsScreenState
+import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.CommentsViewModel
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TEXT_FONT_SIZE
@@ -43,6 +47,18 @@ import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 
 @Composable
 fun CommentsScreen(
+    onBackPressed: () -> Unit,
+) {
+    val viewModel: CommentsViewModel = viewModel()
+    val screenState =
+        viewModel.screenState.observeAsState(CommentsScreenState.Initial).value
+    if (screenState is CommentsScreenState.Comments) {
+        ShowComments(screenState.feedPost, screenState.comments, onBackPressed)
+    }
+}
+
+@Composable
+private fun ShowComments(
     feedPost: FeedPost,
     comments: List<PostComment>,
     onBackPressed: () -> Unit,
