@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.domain.PostComment
 import com.spinoza.learningvknews.domain.StatisticItem
 import com.spinoza.learningvknews.presentation.feature.homescreen.model.HomeScreenState
 
@@ -18,10 +19,28 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private val comments = mutableListOf<PostComment>().apply {
+        repeat(10) {
+            add(PostComment(id = it))
+        }
+    }
+
     private val initialState = HomeScreenState.Posts(initialList)
     private val _screenState = MutableLiveData<HomeScreenState>(initialState)
+    private var savedState: HomeScreenState? = initialState
 
-    fun updateCount(posts: List<FeedPost>, feedPost: FeedPost, statisticItem: StatisticItem) {
+    fun showComments(feedPost: FeedPost) {
+        savedState = _screenState.value
+        _screenState.value = HomeScreenState.Comments(feedPost, comments)
+    }
+
+    fun closeComments() {
+        _screenState.value = savedState
+    }
+
+    fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
+        val currentState = screenState.value
+        if (currentState !is HomeScreenState.Posts) return
         val oldStatistics = feedPost.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
@@ -34,7 +53,7 @@ class MainViewModel : ViewModel() {
         }
         val newFeedPost = feedPost.copy(statistics = newStatistics)
         val newPosts = mutableListOf<FeedPost>()
-        posts.forEach { oldFeedPost ->
+        currentState.posts.forEach { oldFeedPost ->
             if (oldFeedPost.id == feedPost.id) {
                 newPosts.add(newFeedPost)
             } else {
@@ -44,8 +63,10 @@ class MainViewModel : ViewModel() {
         _screenState.value = HomeScreenState.Posts(newPosts)
     }
 
-    fun delete(posts: List<FeedPost>, feedPost: FeedPost) {
-        val newPosts = posts.filter { it.id != feedPost.id }
+    fun delete(feedPost: FeedPost) {
+        val currentState = screenState.value
+        if (currentState !is HomeScreenState.Posts) return
+        val newPosts = currentState.posts.filter { it.id != feedPost.id }
         _screenState.value = HomeScreenState.Posts(newPosts)
     }
 }

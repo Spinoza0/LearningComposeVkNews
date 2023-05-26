@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.PostComment
+import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TEXT_FONT_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TIME_FONT_SIZE
@@ -39,19 +40,19 @@ import com.spinoza.learningvknews.presentation.util.SIZE_LARGE
 import com.spinoza.learningvknews.presentation.util.SIZE_MEDIUM
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI
 import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
-import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 
 @Composable
 fun CommentsScreen(
     feedPost: FeedPost,
     comments: List<PostComment>,
+    onBackPressed: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Comments for FeedPost Id: ${feedPost.id}") },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onBackPressed() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back)

@@ -45,7 +45,7 @@ fun PostsScreen(
             if (dismissState.isDismissed(DismissDirection.EndToStart) ||
                 dismissState.isDismissed(DismissDirection.StartToEnd)
             ) {
-                viewModel.delete(posts, feedPost)
+                viewModel.delete(feedPost)
             }
 
             SwipeToDismiss(
@@ -58,8 +58,9 @@ fun PostsScreen(
                 PostCard(
                     feedPost = feedPost,
                     onStatisticClickListener = { statisticItem ->
-                        viewModel.updateCount(posts, feedPost, statisticItem)
-                    }
+                        viewModel.updateCount(feedPost, statisticItem)
+                    },
+                    onCommentsClickListener = viewModel::showComments
                 )
             }
         }

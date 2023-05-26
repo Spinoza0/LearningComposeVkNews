@@ -2,7 +2,15 @@ package com.spinoza.learningvknews.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -32,9 +40,10 @@ private const val WEIGHT = 1f
 
 @Composable
 fun PostCard(
-    modifier: Modifier = Modifier,
     feedPost: FeedPost,
     onStatisticClickListener: (StatisticItem) -> Unit,
+    onCommentsClickListener: (FeedPost) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier,
@@ -52,7 +61,8 @@ fun PostCard(
 
             PostFooter(
                 feedPost = feedPost,
-                onStatisticClickListener = onStatisticClickListener
+                onStatisticClickListener = onStatisticClickListener,
+                onCommentsClickListener = onCommentsClickListener
             )
         }
     }
@@ -113,6 +123,7 @@ private fun PostBody(feedPost: FeedPost) {
 private fun PostFooter(
     feedPost: FeedPost,
     onStatisticClickListener: (StatisticItem) -> Unit,
+    onCommentsClickListener: (FeedPost) -> Unit,
 ) {
     val statistics = feedPost.statistics
     Row {
@@ -144,7 +155,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_comment,
                 iconDescriptionResId = R.string.comments_count,
                 text = commentsItem.count.toString(),
-                onItemClickListener = { onStatisticClickListener(commentsItem) }
+                onItemClickListener = { onCommentsClickListener(feedPost) }
             )
 
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
