@@ -19,6 +19,7 @@ import com.spinoza.learningvknews.presentation.feature.homescreen.HomeScreen
 import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.navigation.NavigationItem
 import com.spinoza.learningvknews.presentation.navigation.NavigationState
+import com.spinoza.learningvknews.presentation.navigation.Screen
 import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState
 
 @Composable
@@ -32,15 +33,16 @@ fun MainScreen() {
     ) { paddingValues ->
         AppNavGraph(
             navHostController = navigationState.navHostController,
-            homeScreenContent = {
-                if (commentsToPost.value == null) {
-                    HomeScreen(paddingValues) {
-                        commentsToPost.value = it
-                    }
-                } else {
-                    CommentsScreen(commentsToPost.value!!) {
-                        commentsToPost.value = null
-                    }
+            newsFeedScreenContent = {
+                HomeScreen(paddingValues) {
+                    commentsToPost.value = it
+                    navigationState.navigateTo(Screen.Comments.route)
+                }
+            },
+            commentsScreenContent = {
+                CommentsScreen(commentsToPost.value!!) {
+                    commentsToPost.value = null
+                    navigationState.navigateTo(Screen.NewsFeed.route)
                 }
             },
             favouriteScreenContent = { /*TODO*/ },
