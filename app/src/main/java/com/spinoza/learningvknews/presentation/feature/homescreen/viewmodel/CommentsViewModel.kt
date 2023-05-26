@@ -14,7 +14,11 @@ class CommentsViewModel(private val feedPost: FeedPost) : ViewModel() {
 
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
 
-    fun loadComments() {
+    init {
+        loadComments()
+    }
+
+    private fun loadComments() {
         val comments = mutableListOf<PostComment>().apply {
             repeat(10) {
                 add(PostComment(id = it))

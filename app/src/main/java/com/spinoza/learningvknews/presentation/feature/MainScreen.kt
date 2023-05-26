@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.presentation.feature.homescreen.CommentsScreen
@@ -19,7 +20,6 @@ import com.spinoza.learningvknews.presentation.feature.homescreen.HomeScreen
 import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.navigation.NavigationItem
 import com.spinoza.learningvknews.presentation.navigation.NavigationState
-import com.spinoza.learningvknews.presentation.navigation.Screen
 import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState
 
 @Composable
@@ -36,13 +36,12 @@ fun MainScreen() {
             newsFeedScreenContent = {
                 HomeScreen(paddingValues) {
                     commentsToPost.value = it
-                    navigationState.navigateTo(Screen.Comments.route)
+                    navigationState.navigateToComments()
                 }
             },
             commentsScreenContent = {
                 CommentsScreen(commentsToPost.value!!) {
-                    commentsToPost.value = null
-                    navigationState.navigateTo(Screen.NewsFeed.route)
+                    navigationState.navHostController.popBackStack()
                 }
             },
             favouriteScreenContent = { /*TODO*/ },
@@ -56,19 +55,23 @@ private fun MainScreenBottomBar(
 ) {
     BottomNavigation {
         val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-
         val items = listOf(
             NavigationItem.Home,
             NavigationItem.Favourite,
             NavigationItem.Profile
         )
-
         items.forEach { item ->
             val title = stringResource(item.titleResId)
+            val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
+                it.route == item.screen.route
+            } ?: false
             BottomNavigationItem(
-                selected = currentRoute == item.screen.route,
-                onClick = { navigationState.navigateTo(item.screen.route) },
+                selected = isSelected,
+                onClick = {
+                    if (!isSelected) {
+                        navigationState.navigateTo(item.screen.route)
+                    }
+                },
                 icon = { Icon(item.icon, contentDescription = title) },
                 label = { Text(title) },
                 selectedContentColor = MaterialTheme.colors.onPrimary,
