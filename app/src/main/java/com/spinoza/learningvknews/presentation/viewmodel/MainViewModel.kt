@@ -7,6 +7,7 @@ import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.StatisticItem
 
 class MainViewModel : ViewModel() {
+
     private val initialList = mutableListOf<FeedPost>().apply {
         repeat(10) {
             add(FeedPost(id = it))
@@ -14,7 +15,8 @@ class MainViewModel : ViewModel() {
     }
 
     private val _feedPosts = MutableLiveData<List<FeedPost>>(initialList)
-    val feedPosts: LiveData<List<FeedPost>> = _feedPosts
+    val feedPosts: LiveData<List<FeedPost>>
+        get() = _feedPosts
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
         val oldStatistics = feedPost.statistics
