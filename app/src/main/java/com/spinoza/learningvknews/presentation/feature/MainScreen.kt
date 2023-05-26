@@ -1,10 +1,11 @@
-package com.spinoza.learningvknews.presentation.ui.screen
+package com.spinoza.learningvknews.presentation.feature
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.spinoza.learningvknews.presentation.feature.homescreen.HomeScreen
 import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.navigation.NavigationState
 import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState

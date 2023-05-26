@@ -11,8 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.spinoza.learningvknews.presentation.ui.screen.MainScreen
-import com.spinoza.learningvknews.presentation.ui.SIZE_SMALL
+import com.spinoza.learningvknews.presentation.feature.MainScreen
+import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.viewmodel.MainViewModel
 

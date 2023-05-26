@@ -23,6 +23,10 @@ import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.StatisticItem
 import com.spinoza.learningvknews.domain.StatisticType
+import com.spinoza.learningvknews.presentation.util.CARD_ELEVATION
+import com.spinoza.learningvknews.presentation.util.ICON_SIZE
+import com.spinoza.learningvknews.presentation.util.SIZE_MINI
+import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 
 private const val WEIGHT = 1f
 

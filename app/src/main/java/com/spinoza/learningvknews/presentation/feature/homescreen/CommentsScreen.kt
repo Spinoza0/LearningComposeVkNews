@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.ui.screen
+package com.spinoza.learningvknews.presentation.feature.homescreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -31,14 +31,14 @@ import androidx.compose.ui.unit.sp
 import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.PostComment
-import com.spinoza.learningvknews.presentation.ui.COMMENT_BOTTOM_SIZE
-import com.spinoza.learningvknews.presentation.ui.COMMENT_TEXT_FONT_SIZE
-import com.spinoza.learningvknews.presentation.ui.COMMENT_TIME_FONT_SIZE
-import com.spinoza.learningvknews.presentation.ui.COMMENT_TITLE_FONT_SIZE
-import com.spinoza.learningvknews.presentation.ui.SIZE_LARGE
-import com.spinoza.learningvknews.presentation.ui.SIZE_MEDIUM
-import com.spinoza.learningvknews.presentation.ui.SIZE_MINI
-import com.spinoza.learningvknews.presentation.ui.SIZE_SMALL
+import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
+import com.spinoza.learningvknews.presentation.util.COMMENT_TEXT_FONT_SIZE
+import com.spinoza.learningvknews.presentation.util.COMMENT_TIME_FONT_SIZE
+import com.spinoza.learningvknews.presentation.util.COMMENT_TITLE_FONT_SIZE
+import com.spinoza.learningvknews.presentation.util.SIZE_LARGE
+import com.spinoza.learningvknews.presentation.util.SIZE_MEDIUM
+import com.spinoza.learningvknews.presentation.util.SIZE_MINI
+import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 
 @Composable

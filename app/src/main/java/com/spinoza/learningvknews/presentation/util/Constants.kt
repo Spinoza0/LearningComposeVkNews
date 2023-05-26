@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.ui
+package com.spinoza.learningvknews.presentation.util
 
 const val SIZE_MINI = 4
 const val SIZE_SMALL = 8
