@@ -35,6 +35,7 @@ import com.spinoza.learningvknews.domain.FeedPost
 import com.spinoza.learningvknews.domain.PostComment
 import com.spinoza.learningvknews.presentation.feature.homescreen.model.CommentsScreenState
 import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.CommentsViewModel
+import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.CommentsViewModelFactory
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TEXT_FONT_SIZE
@@ -47,9 +48,10 @@ import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 
 @Composable
 fun CommentsScreen(
+    feedPost: FeedPost,
     onBackPressed: () -> Unit,
 ) {
-    val viewModel: CommentsViewModel = viewModel()
+    val viewModel: CommentsViewModel = viewModel(factory = CommentsViewModelFactory(feedPost))
     val screenState =
         viewModel.screenState.observeAsState(CommentsScreenState.Initial).value
     if (screenState is CommentsScreenState.Comments) {

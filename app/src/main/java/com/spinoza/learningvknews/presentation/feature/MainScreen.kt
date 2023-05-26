@@ -38,7 +38,7 @@ fun MainScreen() {
                         commentsToPost.value = it
                     }
                 } else {
-                    CommentsScreen {
+                    CommentsScreen(commentsToPost.value!!) {
                         commentsToPost.value = null
                     }
                 }
