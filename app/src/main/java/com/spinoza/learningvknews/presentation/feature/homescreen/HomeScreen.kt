@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
 import com.spinoza.learningvknews.presentation.feature.homescreen.model.NewsFeedScreenState
 import com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel.NewsFeedViewModel
 

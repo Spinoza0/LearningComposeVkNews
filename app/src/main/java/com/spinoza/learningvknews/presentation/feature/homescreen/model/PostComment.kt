@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.domain
+package com.spinoza.learningvknews.presentation.feature.homescreen.model
 
 import com.spinoza.learningvknews.R
 

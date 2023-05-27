@@ -3,8 +3,8 @@ package com.spinoza.learningvknews.presentation.feature.homescreen.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.StatisticItem
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.StatisticItem
 import com.spinoza.learningvknews.presentation.feature.homescreen.model.NewsFeedScreenState
 
 class NewsFeedViewModel : ViewModel() {

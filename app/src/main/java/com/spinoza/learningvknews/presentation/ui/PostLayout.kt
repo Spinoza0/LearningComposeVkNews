@@ -28,9 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.spinoza.learningvknews.R
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.StatisticItem
-import com.spinoza.learningvknews.domain.StatisticType
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.StatisticItem
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.StatisticType
 import com.spinoza.learningvknews.presentation.util.CARD_ELEVATION
 import com.spinoza.learningvknews.presentation.util.ICON_SIZE
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI

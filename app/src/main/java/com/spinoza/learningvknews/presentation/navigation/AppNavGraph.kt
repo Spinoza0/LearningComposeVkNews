@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
 
 @Composable
 fun AppNavGraph(

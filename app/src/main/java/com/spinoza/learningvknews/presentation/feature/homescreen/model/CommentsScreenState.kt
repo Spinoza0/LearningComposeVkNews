@@ -1,8 +1,5 @@
 package com.spinoza.learningvknews.presentation.feature.homescreen.model
 
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.PostComment
-
 sealed class CommentsScreenState {
 
     object Initial : CommentsScreenState()

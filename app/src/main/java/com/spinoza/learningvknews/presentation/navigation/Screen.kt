@@ -1,6 +1,8 @@
 package com.spinoza.learningvknews.presentation.navigation
 
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 sealed class Screen(val route: String) {
 
@@ -13,7 +15,7 @@ sealed class Screen(val route: String) {
         private const val ROUTE_FOR_ARGS = "comments"
 
         fun getRouteWithArgs(feedPost: FeedPost): String {
-            return "$ROUTE_FOR_ARGS/${feedPost.id}"
+            return "$ROUTE_FOR_ARGS/${Json.encodeToString(feedPost)}"
         }
     }
 
@@ -23,9 +25,9 @@ sealed class Screen(val route: String) {
 
     companion object {
 
-        const val KEY_FEED_POST_ID = "feed_post_id"
+        const val KEY_FEED_POST = "feed_post"
         private const val ROUTE_HOME = "home"
-        private const val ROUTE_COMMENTS = "comments/{$KEY_FEED_POST_ID}"
+        private const val ROUTE_COMMENTS = "comments/{$KEY_FEED_POST}"
         private const val ROUTE_NEWS_FEED = "news_feed"
         private const val ROUTE_FAVOURITE = "favourite"
         private const val ROUTE_PROFILE = "profile"

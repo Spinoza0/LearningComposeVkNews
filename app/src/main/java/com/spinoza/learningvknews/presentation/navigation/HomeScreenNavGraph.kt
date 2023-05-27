@@ -6,7 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
+import kotlinx.serialization.json.Json
 
 fun NavGraphBuilder.homeScreenNavGraph(
     newsFeedScreenContent: @Composable () -> Unit,
@@ -19,11 +20,12 @@ fun NavGraphBuilder.homeScreenNavGraph(
         composable(
             route = Screen.Comments.route,
             arguments = listOf(
-                navArgument(Screen.KEY_FEED_POST_ID) { type = NavType.IntType }
+                navArgument(Screen.KEY_FEED_POST) { type = NavType.StringType }
             )
         ) {
-            val feedPostId = it.arguments?.getInt(Screen.KEY_FEED_POST_ID) ?: 0
-            commentsScreenContent(FeedPost(id = feedPostId))
+            val feedPostJson = it.arguments?.getString(Screen.KEY_FEED_POST) ?: ""
+            val feedPost = Json.decodeFromString<FeedPost>(feedPostJson)
+            commentsScreenContent(feedPost)
         }
     }
 }

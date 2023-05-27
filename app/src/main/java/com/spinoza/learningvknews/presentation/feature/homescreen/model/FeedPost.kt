@@ -1,7 +1,9 @@
-package com.spinoza.learningvknews.domain
+package com.spinoza.learningvknews.presentation.feature.homescreen.model
 
 import com.spinoza.learningvknews.R
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FeedPost(
     val id: Int = 0,
     val communityName: String = "/dev/null",

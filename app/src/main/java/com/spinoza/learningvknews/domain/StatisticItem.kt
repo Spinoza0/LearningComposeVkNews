@@ -1,6 +1,0 @@
-package com.spinoza.learningvknews.domain
-
-data class StatisticItem(
-    val type: StatisticType,
-    val count: Int = 0,
-)
