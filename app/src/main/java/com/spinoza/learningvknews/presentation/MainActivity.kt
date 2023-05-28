@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.spinoza.learningvknews.presentation.feature.ActivityResultTest
 import com.spinoza.learningvknews.presentation.feature.MainScreen
 import com.spinoza.learningvknews.presentation.ui.theme.LearningVkNewsTheme
 import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
@@ -26,7 +27,8 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colors.background)
                         .padding(SIZE_SMALL.dp)
                 ) {
-                    MainScreen()
+                    // MainScreen()
+                    ActivityResultTest()
                 }
             }
         }
