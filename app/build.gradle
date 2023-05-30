@@ -64,6 +64,9 @@ dependencies {
 
     implementation "io.coil-kt:coil-compose:2.1.0"
 
+    implementation "com.vk:android-sdk-core:$vk_version"
+    implementation "com.vk:android-sdk-api:$vk_version"
+
     testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

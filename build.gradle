@@ -3,6 +3,7 @@ buildscript {
         kotlin_version = '1.8.21'
         gradle_version = '8.0.1'
         compose_ui_version = '1.4.3'
+        vk_version = '4.0.1'
     }
 
     dependencies {

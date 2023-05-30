@@ -11,4 +11,5 @@ const val COMMENT_BOTTOM_SIZE = 72
 const val HOME_BOTTOM_SIZE = 72
 const val CARD_ELEVATION = 1
 const val ICON_SIZE = 25
+const val LOGO_SIZE = 100
 const val DISMISS_THRESHOLDS = 0.75f

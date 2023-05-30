@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.feature
+package com.spinoza.learningvknews.presentation.feature.mainscreen
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
