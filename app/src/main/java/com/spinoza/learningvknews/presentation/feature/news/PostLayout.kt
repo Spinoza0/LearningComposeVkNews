@@ -136,7 +136,7 @@ private fun PostFooter(
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
                 iconDescriptionResId = R.string.views_count,
-                text = viewsItem.count.toString(),
+                text = viewsItem.count.toFormattedStatisticCount(),
                 onItemClickListener = { onStatisticClickListener(viewsItem) }
             )
         }
@@ -148,7 +148,7 @@ private fun PostFooter(
             IconWithText(
                 iconResId = R.drawable.ic_share,
                 iconDescriptionResId = R.string.shares_count,
-                text = sharesItem.count.toString(),
+                text = sharesItem.count.toFormattedStatisticCount(),
                 onItemClickListener = { onStatisticClickListener(sharesItem) }
             )
 
@@ -156,7 +156,7 @@ private fun PostFooter(
             IconWithText(
                 iconResId = R.drawable.ic_comment,
                 iconDescriptionResId = R.string.comments_count,
-                text = commentsItem.count.toString(),
+                text = commentsItem.count.toFormattedStatisticCount(),
                 onItemClickListener = { onCommentsClickListener(feedPost) }
             )
 
@@ -164,7 +164,7 @@ private fun PostFooter(
             IconWithText(
                 iconResId = R.drawable.ic_like,
                 iconDescriptionResId = R.string.likes_count,
-                text = likesItem.count.toString(),
+                text = likesItem.count.toFormattedStatisticCount(),
                 onItemClickListener = { onStatisticClickListener(likesItem) }
             )
         }
@@ -174,6 +174,15 @@ private fun PostFooter(
 private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticItem =
     this.find { it.type == type } ?: throw RuntimeException()
 
+private fun Int.toFormattedStatisticCount(): String {
+    return if (this > VISUAL_COUNTER_LIMIT) {
+        String.format("%sK", this / COUNTER_DIVIDER)
+    } else if (this > COUNTER_DIVIDER) {
+        String.format("%.1fK", this.toFloat() / COUNTER_DIVIDER)
+    } else {
+        this.toString()
+    }
+}
 
 @Composable
 private fun IconWithText(
@@ -214,3 +223,6 @@ private fun SpacerWidthMini() {
 private fun SpacerHeightSmall() {
     Spacer(modifier = Modifier.height(SIZE_SMALL.dp))
 }
+
+private const val VISUAL_COUNTER_LIMIT = 100_000
+private const val COUNTER_DIVIDER = 1000
