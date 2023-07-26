@@ -1,6 +1,7 @@
 package com.spinoza.learningvknews.domain.model
 
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
 
 @Serializable
 data class FeedPost(
@@ -11,4 +12,5 @@ data class FeedPost(
     val contentText: String,
     val contentImageUrl: String?,
     val statistics: List<StatisticItem>,
+    val isFavourite: Boolean = Random.nextBoolean()
 )

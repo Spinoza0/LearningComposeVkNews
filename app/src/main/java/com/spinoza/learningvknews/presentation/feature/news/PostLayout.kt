@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,6 +32,7 @@ import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.StatisticItem
 import com.spinoza.learningvknews.domain.model.StatisticType
+import com.spinoza.learningvknews.presentation.theme.DarkRed
 import com.spinoza.learningvknews.presentation.util.CARD_ELEVATION
 import com.spinoza.learningvknews.presentation.util.ICON_SIZE
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI
@@ -127,12 +129,11 @@ private fun PostFooter(
     onStatisticClickListener: (StatisticItem) -> Unit,
     onCommentsClickListener: (FeedPost) -> Unit,
 ) {
-    val statistics = feedPost.statistics
     Row {
         Row(
             modifier = Modifier.weight(WEIGHT)
         ) {
-            val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
+            val viewsItem = feedPost.statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
                 iconDescriptionResId = R.string.views_count,
@@ -144,7 +145,7 @@ private fun PostFooter(
             modifier = Modifier.weight(WEIGHT),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val sharesItem = statistics.getItemByType(StatisticType.SHARES)
+            val sharesItem = feedPost.statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
                 iconDescriptionResId = R.string.shares_count,
@@ -152,7 +153,7 @@ private fun PostFooter(
                 onItemClickListener = { onStatisticClickListener(sharesItem) }
             )
 
-            val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
+            val commentsItem = feedPost.statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 iconResId = R.drawable.ic_comment,
                 iconDescriptionResId = R.string.comments_count,
@@ -160,11 +161,12 @@ private fun PostFooter(
                 onItemClickListener = { onCommentsClickListener(feedPost) }
             )
 
-            val likesItem = statistics.getItemByType(StatisticType.LIKES)
+            val likesItem = feedPost.statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
-                iconResId = R.drawable.ic_like,
+                iconResId = if (feedPost.isFavourite) R.drawable.ic_like_set else R.drawable.ic_like,
                 iconDescriptionResId = R.string.likes_count,
                 text = likesItem.count.toFormattedStatisticCount(),
+                iconTint = if (feedPost.isFavourite) DarkRed else MaterialTheme.colors.onSecondary,
                 onItemClickListener = { onStatisticClickListener(likesItem) }
             )
         }
@@ -189,6 +191,7 @@ private fun IconWithText(
     iconResId: Int,
     iconDescriptionResId: Int,
     text: String,
+    iconTint: Color = MaterialTheme.colors.onSecondary,
     onItemClickListener: () -> Unit,
 ) {
     Row(
@@ -199,7 +202,7 @@ private fun IconWithText(
             modifier = Modifier.size(ICON_SIZE.dp),
             painter = painterResource(id = iconResId),
             contentDescription = stringResource(iconDescriptionResId),
-            tint = MaterialTheme.colors.onSecondary
+            tint = iconTint
         )
         SpacerWidthMini()
         Text(
