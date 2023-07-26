@@ -2,14 +2,14 @@ package com.spinoza.learningvknews.presentation.feature.news.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.spinoza.learningvknews.domain.VkApiService
+import com.spinoza.learningvknews.domain.NewsFeedRepository
 
 class NewsFeedViewModelFactory(
-    private val apiService: VkApiService,
+    private val repository: NewsFeedRepository,
 ) : ViewModelProvider.Factory {
 
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return NewsFeedViewModel(apiService) as T
+        return NewsFeedViewModel(repository) as T
     }
 }

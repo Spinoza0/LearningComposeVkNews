@@ -1,5 +1,6 @@
 package com.spinoza.learningvknews.presentation.feature.main
 
+import android.app.Application
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -18,7 +19,7 @@ import com.spinoza.learningvknews.presentation.navigation.NavigationState
 import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState
 
 @Composable
-fun MainScreen() {
+fun MainScreen(application: Application) {
     val navigationState = rememberNavigationState()
 
     Scaffold(
@@ -27,7 +28,7 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
-                HomeScreen(paddingValues) { feedPost ->
+                HomeScreen(application, paddingValues) { feedPost ->
                     navigationState.navigateToComments(feedPost)
                 }
             },

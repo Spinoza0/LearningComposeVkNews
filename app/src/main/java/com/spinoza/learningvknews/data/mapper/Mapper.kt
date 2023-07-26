@@ -19,7 +19,8 @@ fun NewsFeedResponseDto.toFeedPosts(): List<FeedPost> {
             val firstAttachment = post.attachments?.firstOrNull()
             val bestQualityImageUrl = firstAttachment?.photo?.photoUrls?.lastOrNull()?.url
             val feedPost = FeedPost(
-                id = post.id.toString(),
+                id = post.id,
+                communityId = post.communityId,
                 communityName = group.name,
                 publicationDate = post.date.timeStampToDate(simpleDateFormat),
                 communityImageUrl = group.imageUrl,
@@ -30,7 +31,8 @@ fun NewsFeedResponseDto.toFeedPosts(): List<FeedPost> {
                     StatisticItem(StatisticType.VIEWS, post.views.count),
                     StatisticItem(StatisticType.SHARES, post.shares.count),
                     StatisticItem(StatisticType.COMMENTS, post.comments.count),
-                )
+                ),
+                isLiked = post.likes.userLikes > NO_LIKES
             )
             result.add(feedPost)
         }
@@ -45,3 +47,4 @@ private fun Long.timeStampToDate(simpleDateFormat: SimpleDateFormat): String {
 
 private const val DATE_FORMAT = "d MMMM yyyy, hh:mm"
 private const val MILLIS_IN_SECOND = 1000
+private const val NO_LIKES = 0

@@ -1,10 +1,11 @@
 package com.spinoza.learningvknews.presentation.feature.main
 
+import android.app.Application
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.spinoza.learningvknews.data.repository.VkApiServiceImpl
+import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.presentation.feature.news.NewsFeedScreen
 import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
@@ -13,11 +14,12 @@ import com.spinoza.learningvknews.presentation.feature.news.viewmodel.NewsFeedVi
 
 @Composable
 fun HomeScreen(
+    application: Application,
     paddingValues: PaddingValues,
     onCommentsClickListener: (FeedPost) -> Unit,
 ) {
     val viewModel: NewsFeedViewModel =
-        viewModel(factory = NewsFeedViewModelFactory(VkApiServiceImpl))
+        viewModel(factory = NewsFeedViewModelFactory(NewsFeedRepositoryImpl(application)))
     when (val screenState =
         viewModel.screenState.observeAsState(NewsFeedScreenState.Initial).value
     ) {

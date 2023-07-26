@@ -13,6 +13,5 @@ data class PostDto(
     @SerialName("comments") val comments: CommentsDto,
     @SerialName("views") val views: ViewsDto,
     @SerialName("reposts") val shares: SharesDto,
-    @SerialName("is_favourite") val isFavourite: Boolean = false,
     @SerialName("attachments") val attachments: List<AttachmentDto>? = null,
 )

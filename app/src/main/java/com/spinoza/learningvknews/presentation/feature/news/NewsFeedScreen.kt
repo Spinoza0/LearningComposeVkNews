@@ -57,10 +57,18 @@ fun NewsFeedScreen(
             ) {
                 PostCard(
                     feedPost = feedPost,
-                    onStatisticClickListener = { statisticItem ->
+                    onViewsClickListener = { statisticItem ->
                         viewModel.updateCount(feedPost, statisticItem)
                     },
-                    onCommentsClickListener = onCommentsClickListener
+                    onShareClickListener = { statisticItem ->
+                        viewModel.updateCount(feedPost, statisticItem)
+                    },
+                    onLikeClickListener = { statisticItem ->
+                        viewModel.changeLikeStatus(feedPost)
+                    },
+                    onCommentsClickListener = {
+                        onCommentsClickListener(feedPost)
+                    }
                 )
             }
         }

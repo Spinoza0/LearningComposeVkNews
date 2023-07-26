@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LikesDto(
-    @SerialName("count") val count: Int,
-    @SerialName("user_likes") val userLikes: Int,
+data class LikesCountDto(
+    @SerialName("likes") val count: Int,
 )

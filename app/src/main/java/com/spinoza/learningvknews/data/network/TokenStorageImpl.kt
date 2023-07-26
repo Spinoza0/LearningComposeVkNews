@@ -4,11 +4,11 @@ import com.spinoza.learningvknews.domain.TokenStorage
 
 object TokenStorageImpl : TokenStorage {
 
-    private var value = ""
+    private var value: String? = null
 
-    override fun setToken(token: String) {
+    override fun setToken(token: String?) {
         value = token
     }
 
-    override fun getToken() = value
+    override fun getToken() = value ?: throw IllegalStateException("Token is null")
 }

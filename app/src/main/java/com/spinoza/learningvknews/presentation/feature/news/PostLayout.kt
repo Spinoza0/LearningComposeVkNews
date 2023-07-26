@@ -43,7 +43,9 @@ private const val WEIGHT = 1f
 @Composable
 fun PostCard(
     feedPost: FeedPost,
-    onStatisticClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit,
     onCommentsClickListener: (FeedPost) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,7 +65,9 @@ fun PostCard(
 
             PostFooter(
                 feedPost = feedPost,
-                onStatisticClickListener = onStatisticClickListener,
+                onViewsClickListener = onViewsClickListener,
+                onShareClickListener = onShareClickListener,
+                onLikeClickListener = onLikeClickListener,
                 onCommentsClickListener = onCommentsClickListener
             )
         }
@@ -126,7 +130,9 @@ private fun PostBody(feedPost: FeedPost) {
 @Composable
 private fun PostFooter(
     feedPost: FeedPost,
-    onStatisticClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit,
     onCommentsClickListener: (FeedPost) -> Unit,
 ) {
     Row {
@@ -138,7 +144,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_views_count,
                 iconDescriptionResId = R.string.views_count,
                 text = viewsItem.count.toFormattedStatisticCount(),
-                onItemClickListener = { onStatisticClickListener(viewsItem) }
+                onItemClickListener = { onViewsClickListener(viewsItem) }
             )
         }
         Row(
@@ -150,7 +156,7 @@ private fun PostFooter(
                 iconResId = R.drawable.ic_share,
                 iconDescriptionResId = R.string.shares_count,
                 text = sharesItem.count.toFormattedStatisticCount(),
-                onItemClickListener = { onStatisticClickListener(sharesItem) }
+                onItemClickListener = { onShareClickListener(sharesItem) }
             )
 
             val commentsItem = feedPost.statistics.getItemByType(StatisticType.COMMENTS)
@@ -163,11 +169,11 @@ private fun PostFooter(
 
             val likesItem = feedPost.statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
-                iconResId = if (feedPost.isFavourite) R.drawable.ic_like_set else R.drawable.ic_like,
+                iconResId = if (feedPost.isLiked) R.drawable.ic_like_set else R.drawable.ic_like,
                 iconDescriptionResId = R.string.likes_count,
                 text = likesItem.count.toFormattedStatisticCount(),
-                iconTint = if (feedPost.isFavourite) DarkRed else MaterialTheme.colors.onSecondary,
-                onItemClickListener = { onStatisticClickListener(likesItem) }
+                iconTint = if (feedPost.isLiked) DarkRed else MaterialTheme.colors.onSecondary,
+                onItemClickListener = { onLikeClickListener(likesItem) }
             )
         }
     }

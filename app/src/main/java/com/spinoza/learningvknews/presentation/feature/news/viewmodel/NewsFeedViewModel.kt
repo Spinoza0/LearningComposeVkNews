@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spinoza.learningvknews.domain.VkApiService
+import com.spinoza.learningvknews.domain.NewsFeedRepository
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.StatisticItem
 import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
 import kotlinx.coroutines.launch
 
-class NewsFeedViewModel(private val apiService: VkApiService) : ViewModel() {
+class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel() {
 
     val screenState: LiveData<NewsFeedScreenState>
         get() = _screenState
@@ -23,7 +23,13 @@ class NewsFeedViewModel(private val apiService: VkApiService) : ViewModel() {
 
     private fun loadRecommendation() {
         viewModelScope.launch {
-            _screenState.value = NewsFeedScreenState.Posts(apiService.loadRecommendation())
+            _screenState.value = NewsFeedScreenState.Posts(repository.loadRecommendation())
+        }
+    }
+
+    fun changeLikeStatus(feedPost: FeedPost) {
+        viewModelScope.launch {
+            _screenState.value = NewsFeedScreenState.Posts(repository.addLike(feedPost))
         }
     }
 
