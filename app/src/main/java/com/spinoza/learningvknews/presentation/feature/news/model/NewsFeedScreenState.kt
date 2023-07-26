@@ -1,6 +1,6 @@
 package com.spinoza.learningvknews.presentation.feature.news.model
 
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.domain.model.FeedPost
 
 sealed class NewsFeedScreenState {
 

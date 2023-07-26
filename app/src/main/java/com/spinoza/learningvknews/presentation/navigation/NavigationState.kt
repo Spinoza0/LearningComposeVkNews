@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.domain.model.FeedPost
 
 class NavigationState(val navHostController: NavHostController) {
 

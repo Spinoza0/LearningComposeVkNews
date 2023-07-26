@@ -3,8 +3,8 @@ package com.spinoza.learningvknews.presentation.feature.comments.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.PostComment
+import com.spinoza.learningvknews.domain.model.FeedPost
+import com.spinoza.learningvknews.domain.model.PostComment
 import com.spinoza.learningvknews.presentation.feature.comments.CommentsScreenState
 
 class CommentsViewModel(private val feedPost: FeedPost) : ViewModel() {

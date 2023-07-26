@@ -3,23 +3,29 @@ package com.spinoza.learningvknews.presentation.feature.news.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.StatisticItem
+import androidx.lifecycle.viewModelScope
+import com.spinoza.learningvknews.domain.VkApiService
+import com.spinoza.learningvknews.domain.model.FeedPost
+import com.spinoza.learningvknews.domain.model.StatisticItem
 import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
+import kotlinx.coroutines.launch
 
-class NewsFeedViewModel : ViewModel() {
+class NewsFeedViewModel(private val apiService: VkApiService) : ViewModel() {
 
     val screenState: LiveData<NewsFeedScreenState>
         get() = _screenState
 
-    private val initialList = mutableListOf<FeedPost>().apply {
-        repeat(10) {
-            add(FeedPost(id = it))
-        }
+    private val _screenState = MutableLiveData<NewsFeedScreenState>(NewsFeedScreenState.Initial)
+
+    init {
+        loadRecommendation()
     }
 
-    private val initialState = NewsFeedScreenState.Posts(initialList)
-    private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)
+    private fun loadRecommendation() {
+        viewModelScope.launch {
+            _screenState.value = NewsFeedScreenState.Posts(apiService.loadRecommendation())
+        }
+    }
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
         val currentState = screenState.value

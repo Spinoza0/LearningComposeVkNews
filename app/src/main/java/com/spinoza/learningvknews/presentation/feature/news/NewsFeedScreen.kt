@@ -14,7 +14,7 @@ import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.spinoza.learningvknews.domain.FeedPost
+import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.presentation.feature.news.viewmodel.NewsFeedViewModel
 import com.spinoza.learningvknews.presentation.util.DISMISS_THRESHOLDS
 import com.spinoza.learningvknews.presentation.util.HOME_BOTTOM_SIZE

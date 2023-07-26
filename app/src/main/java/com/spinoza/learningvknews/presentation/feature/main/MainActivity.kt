@@ -6,8 +6,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.spinoza.learningvknews.data.network.TokenStorageImpl
 import com.spinoza.learningvknews.presentation.feature.main.model.AuthState
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModel
+import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.LearningVkNewsTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -18,7 +20,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LearningVkNewsTheme {
-                val viewModel: MainViewModel = viewModel()
+                val viewModel: MainViewModel =
+                    viewModel(factory = MainViewModelFactory(application, TokenStorageImpl))
                 val authState = viewModel.authState.collectAsState()
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()
@@ -29,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 when (authState.value) {
                     is AuthState.Authorized -> MainScreen()
                     is AuthState.NotAuthorized -> LoginScreen {
-                        launcher.launch(listOf(VKScope.WALL))
+                        launcher.launch(listOf(VKScope.WALL, VKScope.FRIENDS))
                     }
 
                     is AuthState.Initial -> {}

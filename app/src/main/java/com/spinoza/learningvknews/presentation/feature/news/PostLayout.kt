@@ -1,6 +1,5 @@
 package com.spinoza.learningvknews.presentation.feature.news
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,10 +26,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.spinoza.learningvknews.R
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.StatisticItem
-import com.spinoza.learningvknews.domain.StatisticType
+import com.spinoza.learningvknews.domain.model.FeedPost
+import com.spinoza.learningvknews.domain.model.StatisticItem
+import com.spinoza.learningvknews.domain.model.StatisticType
 import com.spinoza.learningvknews.presentation.util.CARD_ELEVATION
 import com.spinoza.learningvknews.presentation.util.ICON_SIZE
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI
@@ -74,11 +74,11 @@ private fun PostHeader(feedPost: FeedPost) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        AsyncImage(
+            model = feedPost.communityImageUrl,
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = feedPost.avatarResId),
             contentDescription = stringResource(R.string.image_author)
         )
         SpacerWidthSmall()
@@ -107,15 +107,17 @@ private fun PostHeader(feedPost: FeedPost) {
 private fun PostBody(feedPost: FeedPost) {
     Column {
         Text(text = feedPost.contentText)
-        SpacerHeightSmall()
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            painter = painterResource(id = feedPost.contentImageResId),
-            contentDescription = stringResource(R.string.image_content),
-            contentScale = ContentScale.FillWidth
-        )
+        if (feedPost.contentImageUrl != null) {
+            SpacerHeightSmall()
+            AsyncImage(
+                model = feedPost.contentImageUrl,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentDescription = stringResource(R.string.image_content),
+                contentScale = ContentScale.FillWidth
+            )
+        }
     }
 }
 

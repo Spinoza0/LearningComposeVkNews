@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spinoza.learningvknews.R
-import com.spinoza.learningvknews.domain.FeedPost
-import com.spinoza.learningvknews.domain.PostComment
+import com.spinoza.learningvknews.domain.model.FeedPost
+import com.spinoza.learningvknews.domain.model.PostComment
 import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModel
 import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.LearningVkNewsTheme
