@@ -8,5 +8,5 @@ interface NewsFeedRepository {
 
     suspend fun loadRecommendation(): List<FeedPost>
 
-    suspend fun addLike(feedPost: FeedPost): List<FeedPost>
+    suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost>
 }

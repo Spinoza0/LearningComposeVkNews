@@ -29,7 +29,7 @@ class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel(
 
     fun changeLikeStatus(feedPost: FeedPost) {
         viewModelScope.launch {
-            _screenState.value = NewsFeedScreenState.Posts(repository.addLike(feedPost))
+            _screenState.value = NewsFeedScreenState.Posts(repository.changeLikeStatus(feedPost))
         }
     }
 

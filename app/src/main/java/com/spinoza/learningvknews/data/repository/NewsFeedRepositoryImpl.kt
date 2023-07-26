@@ -38,17 +38,21 @@ class NewsFeedRepositoryImpl(
         feedPosts.toList()
     }
 
-    override suspend fun addLike(feedPost: FeedPost): List<FeedPost> = withContext(ioDispatcher) {
-        val response =
-            apiService.addLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
-        val newLikesCount = response.likes.count
-        val newStatistics = feedPost.statistics.toMutableList().apply {
-            removeIf { it.type == StatisticType.LIKES }
-            add(StatisticItem(StatisticType.LIKES, newLikesCount))
+    override suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost> =
+        withContext(ioDispatcher) {
+            val response = if (feedPost.isLiked) {
+                apiService.deleteLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+            } else {
+                apiService.addLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+            }
+            val newLikesCount = response.likes.count
+            val newStatistics = feedPost.statistics.toMutableList().apply {
+                removeIf { it.type == StatisticType.LIKES }
+                add(StatisticItem(StatisticType.LIKES, newLikesCount))
+            }
+            val newPost = feedPost.copy(statistics = newStatistics, isLiked = !feedPost.isLiked)
+            val postIndex = feedPosts.indexOf(feedPost)
+            feedPosts[postIndex] = newPost
+            feedPosts.toList()
         }
-        val newPost = feedPost.copy(statistics = newStatistics, isLiked = true)
-        val postIndex = feedPosts.indexOf(feedPost)
-        feedPosts[postIndex] = newPost
-        feedPosts.toList()
-    }
 }
