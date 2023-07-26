@@ -1,6 +1,6 @@
 package com.spinoza.learningvknews.presentation.navigation
 
-import com.spinoza.learningvknews.presentation.feature.homescreen.model.FeedPost
+import com.spinoza.learningvknews.domain.FeedPost
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
