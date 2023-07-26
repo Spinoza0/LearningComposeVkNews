@@ -10,6 +10,12 @@ interface ApiService {
     @GET("newsfeed.getRecommended?v=$VK_API_VERSION")
     suspend fun loadRecommendation(@Query(QUERY_TOKEN) token: String): NewsFeedResponseDto
 
+    @GET("newsfeed.getRecommended?v=$VK_API_VERSION")
+    suspend fun loadRecommendation(
+        @Query(QUERY_TOKEN) token: String,
+        @Query(QUERY_START_FROM) startFrom: String,
+    ): NewsFeedResponseDto
+
     @GET("likes.add?v=$VK_API_VERSION&type=post")
     suspend fun addLike(
         @Query(QUERY_TOKEN) token: String,
@@ -29,5 +35,6 @@ interface ApiService {
         const val QUERY_TOKEN = "access_token"
         const val QUERY_OWNER_ID = "owner_id"
         const val QUERY_POST_ID = "item_id"
+        const val QUERY_START_FROM = "start_from"
     }
 }

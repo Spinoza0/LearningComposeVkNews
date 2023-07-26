@@ -25,17 +25,28 @@ class NewsFeedRepositoryImpl(
 
     private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
-    private val feedPosts = mutableListOf<FeedPost>()
+    private val _feedPosts = mutableListOf<FeedPost>()
+    private var nextFrom: String? = null
 
     override fun isLoggedIn(): Boolean {
         tokenStorage.setToken(token?.accessToken)
         return token?.isValid ?: false
     }
 
+    override fun getFeedPosts(): List<FeedPost> = _feedPosts.toList()
+
     override suspend fun loadRecommendation(): List<FeedPost> = withContext(ioDispatcher) {
-        val posts = apiService.loadRecommendation(tokenStorage.getToken()).toFeedPosts()
-        feedPosts.addAll(posts)
-        feedPosts.toList()
+        val startFrom = nextFrom
+        if (startFrom != null || _feedPosts.isEmpty()) {
+            val response = if (startFrom == null) {
+                apiService.loadRecommendation(tokenStorage.getToken())
+            } else {
+                apiService.loadRecommendation(tokenStorage.getToken(), startFrom)
+            }
+            nextFrom = response.newsFeedContent.nextFrom
+            _feedPosts.addAll(response.toFeedPosts())
+        }
+        getFeedPosts()
     }
 
     override suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost> =
@@ -51,8 +62,8 @@ class NewsFeedRepositoryImpl(
                 add(StatisticItem(StatisticType.LIKES, newLikesCount))
             }
             val newPost = feedPost.copy(statistics = newStatistics, isLiked = !feedPost.isLiked)
-            val postIndex = feedPosts.indexOf(feedPost)
-            feedPosts[postIndex] = newPost
-            feedPosts.toList()
+            val postIndex = _feedPosts.indexOf(feedPost)
+            _feedPosts[postIndex] = newPost
+            getFeedPosts()
         }
 }

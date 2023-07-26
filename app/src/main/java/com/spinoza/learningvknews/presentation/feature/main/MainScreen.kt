@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.spinoza.learningvknews.presentation.feature.comments.CommentsScreen
 import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.feature.main.model.NavigationItem
+import com.spinoza.learningvknews.presentation.feature.news.NewsFeedScreen
 import com.spinoza.learningvknews.presentation.navigation.NavigationState
 import com.spinoza.learningvknews.presentation.navigation.rememberNavigationState
 
@@ -28,7 +29,7 @@ fun MainScreen(application: Application) {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
-                HomeScreen(application, paddingValues) { feedPost ->
+                NewsFeedScreen(application, paddingValues) { feedPost ->
                     navigationState.navigateToComments(feedPost)
                 }
             },

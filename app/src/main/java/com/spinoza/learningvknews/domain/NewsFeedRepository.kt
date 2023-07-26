@@ -6,6 +6,8 @@ interface NewsFeedRepository {
 
     fun isLoggedIn(): Boolean
 
+    fun getFeedPosts(): List<FeedPost>
+
     suspend fun loadRecommendation(): List<FeedPost>
 
     suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost>
