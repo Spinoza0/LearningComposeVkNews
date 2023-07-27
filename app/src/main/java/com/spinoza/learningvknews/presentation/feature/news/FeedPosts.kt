@@ -65,12 +65,6 @@ fun FeedPosts(
             ) {
                 PostCard(
                     feedPost = feedPost,
-                    onViewsClickListener = { statisticItem ->
-                        viewModel.updateCount(feedPost, statisticItem)
-                    },
-                    onShareClickListener = { statisticItem ->
-                        viewModel.updateCount(feedPost, statisticItem)
-                    },
                     onLikeClickListener = { statisticItem ->
                         viewModel.changeLikeStatus(feedPost)
                     },
