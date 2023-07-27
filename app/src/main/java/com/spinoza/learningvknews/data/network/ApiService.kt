@@ -30,6 +30,13 @@ interface ApiService {
         @Query(QUERY_POST_ID) postId: Long,
     ): LikesCountResponseDto
 
+    @GET("newsfeed.ignoreItem?v=$VK_API_VERSION&type=wall")
+    suspend fun ignorePost(
+        @Query(QUERY_TOKEN) token: String,
+        @Query(QUERY_OWNER_ID) ownerId: Long,
+        @Query(QUERY_POST_ID) postId: Long,
+    )
+
     private companion object {
         const val VK_API_VERSION = "5.131"
         const val QUERY_TOKEN = "access_token"

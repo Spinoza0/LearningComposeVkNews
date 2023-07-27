@@ -11,4 +11,6 @@ interface NewsFeedRepository {
     suspend fun loadRecommendation(): List<FeedPost>
 
     suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost>
+
+    suspend fun deletePost(feedPost: FeedPost)
 }

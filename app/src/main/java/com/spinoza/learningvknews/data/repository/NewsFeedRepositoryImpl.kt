@@ -66,4 +66,9 @@ class NewsFeedRepositoryImpl(
             _feedPosts[postIndex] = newPost
             getFeedPosts()
         }
+
+    override suspend fun deletePost(feedPost: FeedPost): Unit = withContext(ioDispatcher) {
+        apiService.ignorePost(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+        _feedPosts.remove(feedPost)
+    }
 }

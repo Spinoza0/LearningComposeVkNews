@@ -64,9 +64,9 @@ class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel(
     }
 
     fun delete(feedPost: FeedPost) {
-        val currentState = screenState.value
-        if (currentState !is NewsFeedScreenState.Posts) return
-        val newPosts = currentState.posts.filter { it.id != feedPost.id }
-        _screenState.value = NewsFeedScreenState.Posts(newPosts)
+        viewModelScope.launch {
+            repository.deletePost(feedPost)
+            _screenState.value = NewsFeedScreenState.Posts(repository.getFeedPosts())
+        }
     }
 }
