@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.8.21'
-        gradle_version = '8.0.2'
+        gradle_version = '8.1.0'
         compose_activity_version = '1.7.2'
         compose_ui_version = '1.4.3'
         compose_navigation_version = '2.6.0'
