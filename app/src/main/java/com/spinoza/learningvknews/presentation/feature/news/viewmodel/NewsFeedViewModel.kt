@@ -18,6 +18,7 @@ class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel(
     private val _screenState = MutableLiveData<NewsFeedScreenState>(NewsFeedScreenState.Initial)
 
     init {
+        _screenState.value = NewsFeedScreenState.Loading
         loadRecommendation()
     }
 
