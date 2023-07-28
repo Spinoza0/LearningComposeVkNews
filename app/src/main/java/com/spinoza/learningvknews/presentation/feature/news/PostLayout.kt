@@ -35,6 +35,7 @@ import com.spinoza.learningvknews.domain.model.StatisticType
 import com.spinoza.learningvknews.presentation.theme.DarkRed
 import com.spinoza.learningvknews.presentation.util.CARD_ELEVATION
 import com.spinoza.learningvknews.presentation.util.ICON_SIZE
+import com.spinoza.learningvknews.presentation.util.SIZE_AVATAR
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI
 import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
 
@@ -79,7 +80,7 @@ private fun PostHeader(feedPost: FeedPost) {
         AsyncImage(
             model = feedPost.communityImageUrl,
             modifier = Modifier
-                .size(50.dp)
+                .size(SIZE_AVATAR.dp)
                 .clip(CircleShape),
             contentDescription = stringResource(R.string.image_author)
         )

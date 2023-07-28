@@ -22,7 +22,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             LearningVkNewsTheme {
                 val viewModel: MainViewModel =
-                    viewModel(factory = MainViewModelFactory(NewsFeedRepositoryImpl(application)))
+                    viewModel(
+                        factory = MainViewModelFactory(
+                            NewsFeedRepositoryImpl.getInstance(application)
+                        )
+                    )
                 val authState = viewModel.authState.collectAsState()
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()
@@ -31,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 when (authState.value) {
-                    is AuthState.Authorized -> MainScreen(application)
+                    is AuthState.Authorized -> MainScreen()
                     is AuthState.NotAuthorized -> LoginScreen {
                         launcher.launch(listOf(VKScope.WALL, VKScope.FRIENDS))
                     }

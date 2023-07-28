@@ -1,7 +1,9 @@
 package com.spinoza.learningvknews.data.mapper
 
 import com.spinoza.learningvknews.data.model.NewsFeedResponseDto
+import com.spinoza.learningvknews.data.model.PostCommentsDto
 import com.spinoza.learningvknews.domain.model.FeedPost
+import com.spinoza.learningvknews.domain.model.PostComment
 import com.spinoza.learningvknews.domain.model.StatisticItem
 import com.spinoza.learningvknews.domain.model.StatisticType
 import java.text.SimpleDateFormat
@@ -35,6 +37,32 @@ fun NewsFeedResponseDto.toFeedPosts(): List<FeedPost> {
                 isLiked = post.likes.userLikes > NO_LIKES
             )
             result.add(feedPost)
+        }
+    }
+    return result
+}
+
+fun PostCommentsDto.toPostComments(): List<PostComment> {
+    val result = mutableListOf<PostComment>()
+    val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+    comments.forEach { comment ->
+        if (comment.text.isNotBlank()) {
+            val author = authors.find { it.id == comment.authorId }
+            var fullName = ""
+            var avatarUrl = ""
+            author?.let {
+                fullName = "${author.firstName} ${author.lastName}"
+                avatarUrl = author.avatarUrl
+            }
+            result.add(
+                PostComment(
+                    id = comment.id,
+                    authorName = fullName,
+                    authorAvatarUrl = avatarUrl,
+                    commentText = comment.text,
+                    publicationDate = comment.date.timeStampToDate(simpleDateFormat)
+                )
+            )
         }
     }
     return result

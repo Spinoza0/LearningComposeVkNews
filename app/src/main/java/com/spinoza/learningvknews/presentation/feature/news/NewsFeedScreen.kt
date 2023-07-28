@@ -1,6 +1,5 @@
 package com.spinoza.learningvknews.presentation.feature.news
 
-import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,12 +18,13 @@ import com.spinoza.learningvknews.presentation.theme.DarkBlue
 
 @Composable
 fun NewsFeedScreen(
-    application: Application,
     paddingValues: PaddingValues,
     onCommentsClickListener: (FeedPost) -> Unit,
 ) {
     val viewModel: NewsFeedViewModel =
-        viewModel(factory = NewsFeedViewModelFactory(NewsFeedRepositoryImpl(application)))
+        viewModel(
+            factory = NewsFeedViewModelFactory(NewsFeedRepositoryImpl.getInstance())
+        )
     val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
     when (val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> FeedPosts(
