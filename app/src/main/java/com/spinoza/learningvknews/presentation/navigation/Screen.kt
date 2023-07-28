@@ -1,5 +1,6 @@
 package com.spinoza.learningvknews.presentation.navigation
 
+import android.net.Uri
 import com.spinoza.learningvknews.domain.model.FeedPost
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -13,7 +14,7 @@ sealed class Screen(val route: String) {
     object Comments : Screen(ROUTE_COMMENTS) {
 
         fun getRouteWithArgs(feedPost: FeedPost): String {
-            return "$ROUTE_FOR_ARGS/${Json.encodeToString(feedPost)}"
+            return "$ROUTE_FOR_ARGS/${Json.encodeToString(feedPost).encode()}"
         }
     }
 
@@ -31,4 +32,8 @@ sealed class Screen(val route: String) {
         private const val ROUTE_FAVOURITE = "favourite"
         private const val ROUTE_PROFILE = "profile"
     }
+}
+
+private fun String.encode(): String {
+    return Uri.encode(this)
 }
