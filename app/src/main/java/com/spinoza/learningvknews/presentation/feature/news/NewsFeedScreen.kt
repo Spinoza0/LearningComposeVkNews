@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,7 +25,7 @@ fun NewsFeedScreen(
         viewModel(
             factory = NewsFeedViewModelFactory(NewsFeedRepositoryImpl.getInstance())
         )
-    val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
+    val screenState = viewModel.screenState.collectAsState(NewsFeedScreenState.Initial)
     when (val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> FeedPosts(
             currentState.posts,

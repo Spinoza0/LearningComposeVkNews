@@ -2,16 +2,17 @@ package com.spinoza.learningvknews.domain
 
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
+import kotlinx.coroutines.flow.StateFlow
 
 interface NewsFeedRepository {
 
+    val recommendations: StateFlow<List<FeedPost>>
+
     fun isLoggedIn(): Boolean
 
-    fun getFeedPosts(): List<FeedPost>
+    suspend fun loadNextData()
 
-    suspend fun loadRecommendation(): List<FeedPost>
-
-    suspend fun changeLikeStatus(feedPost: FeedPost): List<FeedPost>
+    suspend fun changeLikeStatus(feedPost: FeedPost)
 
     suspend fun deletePost(feedPost: FeedPost)
 
