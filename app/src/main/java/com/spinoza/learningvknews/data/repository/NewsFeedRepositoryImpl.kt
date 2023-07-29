@@ -15,22 +15,20 @@ import com.spinoza.learningvknews.domain.model.StatisticType
 import com.spinoza.learningvknews.extensions.mergeWith
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
 
 class NewsFeedRepositoryImpl private constructor(
     application: Application,
     private val tokenStorage: TokenStorage = TokenStorageImpl,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val apiService: ApiService = ApiFactory.apiService,
 ) : NewsFeedRepository {
 
@@ -82,7 +80,7 @@ class NewsFeedRepositoryImpl private constructor(
         nextDataNeededEvents.emit(Unit)
     }
 
-    override suspend fun changeLikeStatus(feedPost: FeedPost): Unit = withContext(ioDispatcher) {
+    override suspend fun changeLikeStatus(feedPost: FeedPost) {
         val response = if (feedPost.isLiked) {
             apiService.deleteLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
         } else {
@@ -99,18 +97,20 @@ class NewsFeedRepositoryImpl private constructor(
         refreshedListFlow.emit(feedPosts)
     }
 
-    override suspend fun deletePost(feedPost: FeedPost): Unit = withContext(ioDispatcher) {
+    override suspend fun deletePost(feedPost: FeedPost) {
         apiService.ignorePost(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
         _feedPosts.remove(feedPost)
         refreshedListFlow.emit(feedPosts)
     }
 
-    override suspend fun getComments(feedPost: FeedPost): List<PostComment> =
-        withContext(ioDispatcher) {
-            val response =
-                apiService.getComments(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
-            response.content.toPostComments()
-        }
+    override fun getComments(feedPost: FeedPost): Flow<List<PostComment>> = flow {
+        val response =
+            apiService.getComments(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+        emit(response.content.toPostComments())
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
+    }
 
     companion object {
 

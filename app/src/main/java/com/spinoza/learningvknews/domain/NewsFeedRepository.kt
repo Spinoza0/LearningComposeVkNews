@@ -2,6 +2,7 @@ package com.spinoza.learningvknews.domain
 
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface NewsFeedRepository {
@@ -16,5 +17,5 @@ interface NewsFeedRepository {
 
     suspend fun deletePost(feedPost: FeedPost)
 
-    suspend fun getComments(feedPost: FeedPost): List<PostComment>
+    fun getComments(feedPost: FeedPost): Flow<List<PostComment>>
 }

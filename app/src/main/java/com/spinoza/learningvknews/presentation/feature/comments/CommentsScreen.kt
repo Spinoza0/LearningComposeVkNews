@@ -22,7 +22,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -55,7 +55,7 @@ fun CommentsScreen(
         factory = CommentsViewModelFactory(feedPost, NewsFeedRepositoryImpl.getInstance())
     )
     val screenState =
-        viewModel.screenState.observeAsState(CommentsScreenState.Initial).value
+        viewModel.screenState.collectAsState(CommentsScreenState.Initial).value
     if (screenState is CommentsScreenState.Comments) {
         ShowComments(screenState.comments, onBackPressed)
     }
