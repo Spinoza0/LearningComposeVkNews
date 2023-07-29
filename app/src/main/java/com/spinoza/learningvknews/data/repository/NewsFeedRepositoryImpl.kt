@@ -18,10 +18,12 @@ import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 
@@ -47,7 +49,7 @@ class NewsFeedRepositoryImpl private constructor(
         nextDataNeededEvents.emit(Unit)
         nextDataNeededEvents.collect {
             val startFrom = nextFrom
-            if (startFrom != null || feedPosts.isEmpty()) {
+            if (startFrom != null || _feedPosts.isEmpty()) {
                 val response = if (startFrom == null) {
                     apiService.loadRecommendation(tokenStorage.getToken())
                 } else {
@@ -58,6 +60,9 @@ class NewsFeedRepositoryImpl private constructor(
             }
             emit(feedPosts)
         }
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
     }
 
     override fun isLoggedIn(): Boolean {
@@ -108,6 +113,8 @@ class NewsFeedRepositoryImpl private constructor(
         }
 
     companion object {
+
+        private const val RETRY_TIMEOUT_MILLIS = 3000L
 
         @Volatile
         private var instance: NewsFeedRepositoryImpl? = null

@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spinoza.learningvknews.domain.NewsFeedRepository
 import com.spinoza.learningvknews.domain.model.FeedPost
-import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
 import com.spinoza.learningvknews.extensions.mergeWith
+import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
@@ -18,6 +19,10 @@ class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel(
     private val loadNextDataEvents = MutableSharedFlow<Unit>()
     private val feedPosts: List<FeedPost>
         get() = repository.recommendations.value
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        // TODO
+    }
 
     private val loadNextDataFlow = flow {
         loadNextDataEvents.collect {
@@ -44,13 +49,13 @@ class NewsFeedViewModel(private val repository: NewsFeedRepository) : ViewModel(
     }
 
     fun changeLikeStatus(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.changeLikeStatus(feedPost)
         }
     }
 
     fun delete(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.deletePost(feedPost)
         }
     }
