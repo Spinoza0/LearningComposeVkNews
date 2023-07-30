@@ -1,5 +1,6 @@
 package com.spinoza.learningvknews.domain
 
+import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +10,9 @@ interface NewsFeedRepository {
 
     val recommendations: StateFlow<List<FeedPost>>
 
-    fun isLoggedIn(): Boolean
+    val authState: StateFlow<AuthState>
+
+    suspend fun checkAuthState()
 
     suspend fun loadNextData()
 

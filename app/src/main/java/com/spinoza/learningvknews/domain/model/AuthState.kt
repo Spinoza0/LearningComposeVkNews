@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.feature.main.model
+package com.spinoza.learningvknews.domain.model
 
 sealed class AuthState {
 

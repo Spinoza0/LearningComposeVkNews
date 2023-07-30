@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.spinoza.learningvknews.presentation.feature.comments.CommentsScreen
-import com.spinoza.learningvknews.presentation.feature.main.model.NavigationItem
+import com.spinoza.learningvknews.presentation.navigation.NavigationItem
 import com.spinoza.learningvknews.presentation.feature.news.NewsFeedScreen
 import com.spinoza.learningvknews.presentation.navigation.AppNavGraph
 import com.spinoza.learningvknews.presentation.navigation.NavigationState

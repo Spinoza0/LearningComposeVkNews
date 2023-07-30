@@ -8,6 +8,7 @@ import com.spinoza.learningvknews.data.network.ApiService
 import com.spinoza.learningvknews.data.network.TokenStorageImpl
 import com.spinoza.learningvknews.domain.NewsFeedRepository
 import com.spinoza.learningvknews.domain.TokenStorage
+import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
 import com.spinoza.learningvknews.domain.model.StatisticItem
@@ -34,17 +35,20 @@ class NewsFeedRepositoryImpl private constructor(
 
     private val repositoryScope = CoroutineScope(Dispatchers.IO)
     private val storage = VKPreferencesKeyValueStorage(application)
-    private val token = VKAccessToken.restore(storage)
+    private val token
+        get() = VKAccessToken.restore(storage)
+
     private val _feedPosts = mutableListOf<FeedPost>()
     private val feedPosts: List<FeedPost>
         get() = _feedPosts.toList()
 
     private var nextFrom: String? = null
-    private val nextDataNeededEvents = MutableSharedFlow<Unit>(replay = 1)
+    private val nextDataNeededEvents = MutableSharedFlow<Unit>(replay = REPLAY_VALUE)
+    private val checkAuthStateEvents = MutableSharedFlow<Unit>(replay = REPLAY_VALUE)
     private val refreshedListFlow = MutableSharedFlow<List<FeedPost>>()
 
     private val loadedListFlow = flow {
-        nextDataNeededEvents.emit(Unit)
+        loadNextData()
         nextDataNeededEvents.collect {
             val startFrom = nextFrom
             if (startFrom != null || _feedPosts.isEmpty()) {
@@ -63,11 +67,6 @@ class NewsFeedRepositoryImpl private constructor(
         true
     }
 
-    override fun isLoggedIn(): Boolean {
-        tokenStorage.setToken(token?.accessToken)
-        return token?.isValid ?: false
-    }
-
     override val recommendations: StateFlow<List<FeedPost>> = loadedListFlow
         .mergeWith(refreshedListFlow)
         .stateIn(
@@ -75,6 +74,29 @@ class NewsFeedRepositoryImpl private constructor(
             started = SharingStarted.Lazily,
             initialValue = feedPosts
         )
+
+    override val authState: StateFlow<AuthState> = flow {
+        checkAuthState()
+        checkAuthStateEvents.collect {
+            val currentToken = token
+            var accessToken: String? = null
+            var state: AuthState = AuthState.NotAuthorized
+            if (currentToken != null && currentToken.isValid) {
+                state = AuthState.Authorized
+                accessToken = currentToken.accessToken
+            }
+            tokenStorage.setToken(accessToken)
+            emit(state)
+        }
+    }.stateIn(
+        scope = repositoryScope,
+        started = SharingStarted.Lazily,
+        initialValue = AuthState.Initial
+    )
+
+    override suspend fun checkAuthState() {
+        checkAuthStateEvents.emit(Unit)
+    }
 
     override suspend fun loadNextData() {
         nextDataNeededEvents.emit(Unit)
@@ -115,6 +137,7 @@ class NewsFeedRepositoryImpl private constructor(
     companion object {
 
         private const val RETRY_TIMEOUT_MILLIS = 3000L
+        private const val REPLAY_VALUE = 1
 
         @Volatile
         private var instance: NewsFeedRepositoryImpl? = null

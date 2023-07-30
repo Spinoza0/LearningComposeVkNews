@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.presentation.feature.main.model
+package com.spinoza.learningvknews.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
@@ -6,7 +6,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.spinoza.learningvknews.R
-import com.spinoza.learningvknews.presentation.navigation.Screen
 
 sealed class NavigationItem(
     val screen: Screen,

@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
-import com.spinoza.learningvknews.presentation.feature.main.model.AuthState
+import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModel
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.LearningVkNewsTheme
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()
                 ) {
-                    viewModel.preformAuthResult(it)
+                    viewModel.preformAuthResult()
                 }
 
                 when (authState.value) {
