@@ -1,10 +1,8 @@
 package com.spinoza.learningvknews.data.repository
 
-import android.content.Context
 import com.spinoza.learningvknews.data.mapper.toFeedPosts
 import com.spinoza.learningvknews.data.mapper.toPostComments
 import com.spinoza.learningvknews.data.network.ApiService
-import com.spinoza.learningvknews.data.network.TokenStorage
 import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
@@ -15,7 +13,6 @@ import com.spinoza.learningvknews.extensions.mergeWith
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,15 +22,14 @@ import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepositoryImpl(
-    context: Context,
-    private val tokenStorage: TokenStorage,
     private val apiService: ApiService,
+    private val vkPreferencesKeyValueStorage: VKPreferencesKeyValueStorage,
+    private val repositoryScope: CoroutineScope,
 ) : NewsFeedRepository {
 
-    private val repositoryScope = CoroutineScope(Dispatchers.IO)
-    private val storage = VKPreferencesKeyValueStorage(context)
+    private var accessToken: String = EMPTY_STRING
     private val token
-        get() = VKAccessToken.restore(storage)
+        get() = VKAccessToken.restore(vkPreferencesKeyValueStorage)
 
     private val _feedPosts = mutableListOf<FeedPost>()
     private val feedPosts: List<FeedPost>
@@ -50,9 +46,9 @@ class NewsFeedRepositoryImpl(
             val startFrom = nextFrom
             if (startFrom != null || _feedPosts.isEmpty()) {
                 val response = if (startFrom == null) {
-                    apiService.loadRecommendation(tokenStorage.getToken())
+                    apiService.loadRecommendation(accessToken)
                 } else {
-                    apiService.loadRecommendation(tokenStorage.getToken(), startFrom)
+                    apiService.loadRecommendation(accessToken, startFrom)
                 }
                 nextFrom = response.newsFeedContent.nextFrom
                 _feedPosts.addAll(response.toFeedPosts())
@@ -76,13 +72,13 @@ class NewsFeedRepositoryImpl(
         checkAuthState()
         checkAuthStateEvents.collect {
             val currentToken = token
-            var accessToken: String? = null
+            var newAccessToken = EMPTY_STRING
             var state: AuthState = AuthState.NotAuthorized
             if (currentToken != null && currentToken.isValid) {
                 state = AuthState.Authorized
-                accessToken = currentToken.accessToken
+                newAccessToken = currentToken.accessToken
             }
-            tokenStorage.setToken(accessToken)
+            accessToken = newAccessToken
             emit(state)
         }
     }.stateIn(
@@ -105,9 +101,9 @@ class NewsFeedRepositoryImpl(
 
     override suspend fun changeLikeStatus(feedPost: FeedPost) {
         val response = if (feedPost.isLiked) {
-            apiService.deleteLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+            apiService.deleteLike(accessToken, feedPost.communityId, feedPost.id)
         } else {
-            apiService.addLike(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+            apiService.addLike(accessToken, feedPost.communityId, feedPost.id)
         }
         val newLikesCount = response.likes.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
@@ -121,14 +117,14 @@ class NewsFeedRepositoryImpl(
     }
 
     override suspend fun deletePost(feedPost: FeedPost) {
-        apiService.ignorePost(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+        apiService.ignorePost(accessToken, feedPost.communityId, feedPost.id)
         _feedPosts.remove(feedPost)
         refreshedListFlow.emit(feedPosts)
     }
 
     override fun getComments(feedPost: FeedPost): StateFlow<List<PostComment>> = flow {
         val response =
-            apiService.getComments(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
+            apiService.getComments(accessToken, feedPost.communityId, feedPost.id)
         emit(response.content.toPostComments())
     }.retry {
         delay(RETRY_TIMEOUT_MILLIS)
@@ -143,5 +139,6 @@ class NewsFeedRepositoryImpl(
 
         private const val RETRY_TIMEOUT_MILLIS = 3000L
         private const val REPLAY_VALUE = 1
+        private const val EMPTY_STRING = ""
     }
 }
