@@ -8,6 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.AuthState
+import com.spinoza.learningvknews.domain.usecase.CheckAuthStateUseCase
+import com.spinoza.learningvknews.domain.usecase.GetAuthStateUseCase
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModel
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.LearningVkNewsTheme
@@ -21,10 +23,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LearningVkNewsTheme {
+                val repository = NewsFeedRepositoryImpl.getInstance(application)
                 val viewModel: MainViewModel =
                     viewModel(
                         factory = MainViewModelFactory(
-                            NewsFeedRepositoryImpl.getInstance(application)
+                            GetAuthStateUseCase(repository),
+                            CheckAuthStateUseCase(repository)
                         )
                     )
                 val authState = viewModel.authState.collectAsState()

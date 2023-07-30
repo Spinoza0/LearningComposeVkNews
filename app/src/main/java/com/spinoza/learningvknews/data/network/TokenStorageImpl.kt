@@ -1,7 +1,5 @@
 package com.spinoza.learningvknews.data.network
 
-import com.spinoza.learningvknews.domain.TokenStorage
-
 object TokenStorageImpl : TokenStorage {
 
     private var value: String? = null

@@ -1,4 +1,4 @@
-package com.spinoza.learningvknews.domain
+package com.spinoza.learningvknews.data.network
 
 interface TokenStorage {
 

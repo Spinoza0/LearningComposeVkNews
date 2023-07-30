@@ -35,6 +35,7 @@ import com.spinoza.learningvknews.R
 import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
+import com.spinoza.learningvknews.domain.usecase.GetCommentsUseCase
 import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModel
 import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModelFactory
 import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
@@ -52,7 +53,10 @@ fun CommentsScreen(
     onBackPressed: () -> Unit,
 ) {
     val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(feedPost, NewsFeedRepositoryImpl.getInstance())
+        factory = CommentsViewModelFactory(
+            feedPost,
+            GetCommentsUseCase(NewsFeedRepositoryImpl.getInstance())
+        )
     )
     val screenState =
         viewModel.screenState.collectAsState(CommentsScreenState.Initial).value

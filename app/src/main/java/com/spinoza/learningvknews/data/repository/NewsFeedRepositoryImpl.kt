@@ -5,21 +5,20 @@ import com.spinoza.learningvknews.data.mapper.toFeedPosts
 import com.spinoza.learningvknews.data.mapper.toPostComments
 import com.spinoza.learningvknews.data.network.ApiFactory
 import com.spinoza.learningvknews.data.network.ApiService
+import com.spinoza.learningvknews.data.network.TokenStorage
 import com.spinoza.learningvknews.data.network.TokenStorageImpl
-import com.spinoza.learningvknews.domain.NewsFeedRepository
-import com.spinoza.learningvknews.domain.TokenStorage
 import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
 import com.spinoza.learningvknews.domain.model.StatisticItem
 import com.spinoza.learningvknews.domain.model.StatisticType
+import com.spinoza.learningvknews.domain.repository.NewsFeedRepository
 import com.spinoza.learningvknews.extensions.mergeWith
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -67,7 +66,7 @@ class NewsFeedRepositoryImpl private constructor(
         true
     }
 
-    override val recommendations: StateFlow<List<FeedPost>> = loadedListFlow
+    private val recommendations: StateFlow<List<FeedPost>> = loadedListFlow
         .mergeWith(refreshedListFlow)
         .stateIn(
             scope = repositoryScope,
@@ -75,7 +74,7 @@ class NewsFeedRepositoryImpl private constructor(
             initialValue = feedPosts
         )
 
-    override val authState: StateFlow<AuthState> = flow {
+    private val authState: StateFlow<AuthState> = flow {
         checkAuthState()
         checkAuthStateEvents.collect {
             val currentToken = token
@@ -93,6 +92,10 @@ class NewsFeedRepositoryImpl private constructor(
         started = SharingStarted.Lazily,
         initialValue = AuthState.Initial
     )
+
+    override fun getAuthState(): StateFlow<AuthState> = authState
+
+    override fun getRecommendations(): StateFlow<List<FeedPost>> = recommendations
 
     override suspend fun checkAuthState() {
         checkAuthStateEvents.emit(Unit)
@@ -125,14 +128,18 @@ class NewsFeedRepositoryImpl private constructor(
         refreshedListFlow.emit(feedPosts)
     }
 
-    override fun getComments(feedPost: FeedPost): Flow<List<PostComment>> = flow {
+    override fun getComments(feedPost: FeedPost): StateFlow<List<PostComment>> = flow {
         val response =
             apiService.getComments(tokenStorage.getToken(), feedPost.communityId, feedPost.id)
         emit(response.content.toPostComments())
     }.retry {
         delay(RETRY_TIMEOUT_MILLIS)
         true
-    }
+    }.stateIn(
+        scope = repositoryScope,
+        started = SharingStarted.Lazily,
+        initialValue = emptyList()
+    )
 
     companion object {
 
