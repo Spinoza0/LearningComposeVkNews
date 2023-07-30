@@ -11,6 +11,7 @@ buildscript {
         retrofit_converter_version = '1.0.0'
         kotlinx_serialization_version = '1.5.1'
         coil_compose_version = '2.1.0'
+        leakcanary_version = '2.12'
     }
 
     dependencies {
