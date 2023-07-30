@@ -70,6 +70,8 @@ dependencies {
     implementation "com.vk:android-sdk-core:$vk_version"
     implementation "com.vk:android-sdk-api:$vk_version"
 
+    implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

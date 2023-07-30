@@ -5,16 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.AuthState
-import com.spinoza.learningvknews.domain.usecase.CheckAuthStateUseCase
-import com.spinoza.learningvknews.domain.usecase.GetAuthStateUseCase
 import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModel
-import com.spinoza.learningvknews.presentation.feature.main.viewmodel.MainViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.LearningVkNewsTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -23,14 +19,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LearningVkNewsTheme {
-                val repository = NewsFeedRepositoryImpl.getInstance(application)
-                val viewModel: MainViewModel =
-                    viewModel(
-                        factory = MainViewModelFactory(
-                            GetAuthStateUseCase(repository),
-                            CheckAuthStateUseCase(repository)
-                        )
-                    )
+                val viewModel: MainViewModel = koinViewModel()
                 val authState = viewModel.authState.collectAsState()
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()

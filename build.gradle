@@ -12,6 +12,7 @@ buildscript {
         kotlinx_serialization_version = '1.5.1'
         coil_compose_version = '2.1.0'
         leakcanary_version = '2.12'
+        koin_android_compose_version = '3.4.6'
     }
 
     dependencies {

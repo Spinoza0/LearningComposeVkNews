@@ -29,15 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.spinoza.learningvknews.R
-import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
-import com.spinoza.learningvknews.domain.usecase.GetCommentsUseCase
 import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModel
-import com.spinoza.learningvknews.presentation.feature.comments.viewmodel.CommentsViewModelFactory
 import com.spinoza.learningvknews.presentation.util.COMMENT_BOTTOM_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TEXT_FONT_SIZE
 import com.spinoza.learningvknews.presentation.util.COMMENT_TIME_FONT_SIZE
@@ -46,18 +42,16 @@ import com.spinoza.learningvknews.presentation.util.SIZE_AVATAR
 import com.spinoza.learningvknews.presentation.util.SIZE_MEDIUM
 import com.spinoza.learningvknews.presentation.util.SIZE_MINI
 import com.spinoza.learningvknews.presentation.util.SIZE_SMALL
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CommentsScreen(
     feedPost: FeedPost,
     onBackPressed: () -> Unit,
 ) {
-    val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost,
-            GetCommentsUseCase(NewsFeedRepositoryImpl.getInstance())
-        )
-    )
+    val viewModel: CommentsViewModel = koinViewModel { parametersOf(feedPost) }
+
     val screenState =
         viewModel.screenState.collectAsState(CommentsScreenState.Initial).value
     if (screenState is CommentsScreenState.Comments) {

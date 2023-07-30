@@ -1,12 +1,10 @@
 package com.spinoza.learningvknews.data.repository
 
-import android.app.Application
+import android.content.Context
 import com.spinoza.learningvknews.data.mapper.toFeedPosts
 import com.spinoza.learningvknews.data.mapper.toPostComments
-import com.spinoza.learningvknews.data.network.ApiFactory
 import com.spinoza.learningvknews.data.network.ApiService
 import com.spinoza.learningvknews.data.network.TokenStorage
-import com.spinoza.learningvknews.data.network.TokenStorageImpl
 import com.spinoza.learningvknews.domain.model.AuthState
 import com.spinoza.learningvknews.domain.model.FeedPost
 import com.spinoza.learningvknews.domain.model.PostComment
@@ -26,14 +24,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
-class NewsFeedRepositoryImpl private constructor(
-    application: Application,
-    private val tokenStorage: TokenStorage = TokenStorageImpl,
-    private val apiService: ApiService = ApiFactory.apiService,
+class NewsFeedRepositoryImpl(
+    context: Context,
+    private val tokenStorage: TokenStorage,
+    private val apiService: ApiService,
 ) : NewsFeedRepository {
 
     private val repositoryScope = CoroutineScope(Dispatchers.IO)
-    private val storage = VKPreferencesKeyValueStorage(application)
+    private val storage = VKPreferencesKeyValueStorage(context)
     private val token
         get() = VKAccessToken.restore(storage)
 
@@ -145,22 +143,5 @@ class NewsFeedRepositoryImpl private constructor(
 
         private const val RETRY_TIMEOUT_MILLIS = 3000L
         private const val REPLAY_VALUE = 1
-
-        @Volatile
-        private var instance: NewsFeedRepositoryImpl? = null
-        private val LOCK = Unit
-
-        fun getInstance(application: Application): NewsFeedRepositoryImpl {
-            instance?.let { return it }
-            synchronized(LOCK) {
-                instance?.let { return it }
-                return NewsFeedRepositoryImpl(application).also { instance = it }
-            }
-        }
-
-        fun getInstance(): NewsFeedRepositoryImpl {
-            instance?.let { return it }
-            throw RuntimeException("NewsFeedRepositoryImpl not created")
-        }
     }
 }

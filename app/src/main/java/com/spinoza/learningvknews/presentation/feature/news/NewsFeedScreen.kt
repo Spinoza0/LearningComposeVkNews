@@ -8,33 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.spinoza.learningvknews.data.repository.NewsFeedRepositoryImpl
 import com.spinoza.learningvknews.domain.model.FeedPost
-import com.spinoza.learningvknews.domain.usecase.ChangeLikeStatusUseCase
-import com.spinoza.learningvknews.domain.usecase.DeletePostUseCase
-import com.spinoza.learningvknews.domain.usecase.GetRecommendationsUseCase
-import com.spinoza.learningvknews.domain.usecase.LoadNextDataUseCase
 import com.spinoza.learningvknews.presentation.feature.news.model.NewsFeedScreenState
 import com.spinoza.learningvknews.presentation.feature.news.viewmodel.NewsFeedViewModel
-import com.spinoza.learningvknews.presentation.feature.news.viewmodel.NewsFeedViewModelFactory
 import com.spinoza.learningvknews.presentation.theme.DarkBlue
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NewsFeedScreen(
     paddingValues: PaddingValues,
     onCommentsClickListener: (FeedPost) -> Unit,
 ) {
-    val repository = NewsFeedRepositoryImpl.getInstance()
-    val viewModel: NewsFeedViewModel =
-        viewModel(
-            factory = NewsFeedViewModelFactory(
-                GetRecommendationsUseCase(repository),
-                LoadNextDataUseCase(repository),
-                ChangeLikeStatusUseCase(repository),
-                DeletePostUseCase(repository)
-            )
-        )
+    val viewModel: NewsFeedViewModel = koinViewModel()
     val screenState = viewModel.screenState.collectAsState(NewsFeedScreenState.Initial)
     when (val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> FeedPosts(
