@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
-val dataModule = module {
+val networkModule = module {
 
     single<NewsFeedRepository> {
         NewsFeedRepositoryImpl(
