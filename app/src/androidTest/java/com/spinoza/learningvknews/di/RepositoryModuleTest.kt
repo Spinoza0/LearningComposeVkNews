@@ -19,32 +19,11 @@ val repositoryModuleTest = module {
             override fun getAuthState(): StateFlow<AuthState> =
                 MutableStateFlow<AuthState>(AuthState.Authorized).asStateFlow()
 
-            override fun getRecommendations(): StateFlow<List<FeedPost>> {
-                val statistics = listOf(
-                    StatisticItem(StatisticType.SHARES, 1),
-                    StatisticItem(StatisticType.COMMENTS, 1),
-                    StatisticItem(StatisticType.LIKES, 1),
-                    StatisticItem(StatisticType.VIEWS, 1),
-                )
-                val recommendations = listOf(
-                    FeedPost(
-                        1,
-                        1,
-                        "Test community",
-                        "01.01.2023",
-                        "",
-                        "Content",
-                        "",
-                        statistics,
-                        false
-                    )
-                )
-                return MutableStateFlow(recommendations).asStateFlow()
-            }
+            override fun getRecommendations(): StateFlow<List<FeedPost>> =
+                MutableStateFlow(recommendations).asStateFlow()
 
-            override fun getComments(feedPost: FeedPost): StateFlow<List<PostComment>> {
-                return MutableStateFlow<List<PostComment>>(listOf()).asStateFlow()
-            }
+            override fun getComments(feedPost: FeedPost): StateFlow<List<PostComment>> =
+                MutableStateFlow(comments).asStateFlow()
 
             override suspend fun checkAuthState() {}
 
@@ -56,3 +35,37 @@ val repositoryModuleTest = module {
         }
     }
 }
+
+private val statistics = listOf(
+    StatisticItem(StatisticType.SHARES, 1),
+    StatisticItem(StatisticType.COMMENTS, 1),
+    StatisticItem(StatisticType.LIKES, 1),
+    StatisticItem(StatisticType.VIEWS, 1),
+)
+
+const val TEST_CONTENT_TEXT = "content"
+const val TEST_COMMENT_TEXT = "comment"
+
+private val recommendations = listOf(
+    FeedPost(
+        1,
+        1,
+        "Test community",
+        "01.01.2023",
+        "",
+        TEST_CONTENT_TEXT,
+        "",
+        statistics,
+        false
+    )
+)
+
+private val comments = listOf(
+    PostComment(
+        1,
+        "Author",
+        "",
+        TEST_COMMENT_TEXT,
+        "01.01.2023"
+    )
+)
