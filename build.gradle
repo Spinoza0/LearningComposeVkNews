@@ -1,16 +1,16 @@
 buildscript {
     ext {
-        kotlin_version = '1.8.21'
-        gradle_version = '8.1.0'
+        kotlin_version = '1.9.0'
+        gradle_version = '8.1.1'
         compose_activity_version = '1.7.2'
-        compose_ui_version = '1.4.3'
-        compose_navigation_version = '2.6.0'
+        compose_ui_version = '1.5.0'
+        compose_navigation_version = '2.7.1'
         vk_version = '4.0.1'
         retrofit_version = '2.9.0'
-        logging_interceptor_version = '4.9.3'
+        logging_interceptor_version = '4.11.0'
         retrofit_converter_version = '1.0.0'
         kotlinx_serialization_version = '1.5.1'
-        coil_compose_version = '2.1.0'
+        coil_compose_version = '2.4.0'
         leakcanary_version = '2.12'
         koin_android_compose_version = '3.4.6'
     }
